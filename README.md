@@ -1,9 +1,26 @@
+# Order System
+This is a small order platform with a session based registration system.
 
 ## Requirements
  * PHP 5.5
  * composer
  * php-mcrypt
 
+## Usage
+open a new terminal window and navigate into this folder
+
+> cd /some/path/projectX
+
+load all libraries used by this project
+(therefore you need a composer.phar installation).
+
+To install composer just run:
+
+> curl -sS https://getcomposer.org/installer | php
+
+Then you can load all dependencies:
+
+> php composer.phar install
 
 ## TODO
  * password hashing
@@ -12,6 +29,7 @@
 ## Developer Info
 
 ### Propel ORM
+
 generate sql (propel)
 
 > vendor/bin/propel sql:build
