@@ -1,5 +1,10 @@
 {
+    "name" : "ProjectX",
+    "description" : "minimalsitic shop written in php",
+    "version" : "1.0.0",
     "require": {
+	"php": ">=5.5",
+	"ext-mcrypt": "*",
         "slim/slim": "2.*",
         "slim/views": "dev-master",
         "twig/twig": "1.*",
