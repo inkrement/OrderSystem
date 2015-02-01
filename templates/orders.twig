@@ -1,0 +1,26 @@
+{% extends "master.twig" %}
+
+{% block title %}Bestellungen{% endblock %}
+
+{% block content %}
+
+    <h1>Bestellübersicht</h1>
+
+    <table>
+        <tr>
+            <th>Kunde</th>
+            <th>Produkt</th>
+            <th>Datum</th>
+        </tr>
+
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.getName() }}</td>
+                <td>{{ order.description() }}</td>
+                <td>{{ order.getUnitPrice() }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

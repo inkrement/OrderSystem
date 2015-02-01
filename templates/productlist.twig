@@ -1,0 +1,26 @@
+{% extends "master.twig" %}
+
+{% block title %}Produktliste{% endblock %}
+
+{% block content %}
+
+    <h1>Produkte</h1>
+
+    <table>
+        <tr>
+            <th>name</th>
+            <th>beschreibung</th>
+            <th>preis</th>
+        </tr>
+
+        {% for product in products %}
+            <tr>
+                <td>{{ product.getName() }}</td>
+                <td>{{ product.description() }}</td>
+                <td>{{ product.getUnitPrice() }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

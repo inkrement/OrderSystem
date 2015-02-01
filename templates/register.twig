@@ -1,0 +1,20 @@
+{% extends "master.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <h1>Login</h1>
+
+    {% import "components/forms.twig" as forms %}
+
+    {{ error }}
+    <form name="register" action="register" method="post">
+        {{ forms.input('firstname') }}
+        {{ forms.input('lastname') }}
+        {{ forms.input('email') }}
+        {{ forms.input('password') }}
+        <input type="submit" value="register">
+    </form>
+
+{% endblock %}

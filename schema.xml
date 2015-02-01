@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="shop" defaultIdMethod="native">
+    <table name="user" phpName="User">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="firstname" type="varchar" size="255" required="true" />
+        <column name="lastname" type="varchar" size="255" required="true" />
+        <column name="email" type="varchar" size="255" required="true" />
+        <column name="password" type="varchar" size="255" required="true"/>
+        <!-- values: customer, employee -->
+        <column name="role" type="varchar" size="255" defaultValue="customer" required="true"/>
+    </table>
+    <table name="product" phpName="Product">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="name" type="varchar" size="128" required="true"/>
+        <column name="img" type="varchar" size="128" required="true"/>
+        <column name="unit" type="varchar" size="10" required="true"/>
+        <column name="description" type="varchar" size="255" required="false"/>
+        <column name="unit_price" type="float" required="true"/>
+    </table>
+    <table name="order" phpName="Order">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="user_id" type="integer" required="true" />
+        <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" />
+        <foreign-key foreignTable="user">
+            <reference local="user_id" foreign="id" />
+        </foreign-key>
+    </table>
+    <table name="orderposition" phpName="OrderPosition">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="order_id" type="integer" required="true"/>
+        <column name="product_id" type="integer" required="true"/>
+        <column name="quantity" type="integer" required="true"/>
+        <foreign-key foreignTable="order">
+            <reference local="order_id" foreign="id" />
+        </foreign-key>
+        <foreign-key foreignTable="product">
+            <reference local="product_id" foreign="id" />
+        </foreign-key>
+    </table>
+</database>

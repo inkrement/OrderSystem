@@ -1,0 +1,19 @@
+propel:
+  database:
+    connections:
+      shop:
+        adapter: sqlite
+        classname: Propel\Runtime\Connection\ConnectionWrapper
+        dsn: "sqlite:shop.db"
+        user: "chris"
+        password: "somepassword"
+        settings:
+          charset: utf8
+  runtime:
+      defaultConnection: shop
+      connections:
+          - shop
+  generator:
+      defaultConnection: shop
+      connections:
+          - shop
