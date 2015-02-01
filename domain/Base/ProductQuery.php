@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildProductQuery orderByImg($order = Criteria::ASC) Order by the img column
  * @method     ChildProductQuery orderByUnit($order = Criteria::ASC) Order by the unit column
  * @method     ChildProductQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildProductQuery orderByDeleteflag($order = Criteria::ASC) Order by the deleteFlag column
  * @method     ChildProductQuery orderByUnitPrice($order = Criteria::ASC) Order by the unit_price column
  *
  * @method     ChildProductQuery groupById() Group by the id column
@@ -32,6 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildProductQuery groupByImg() Group by the img column
  * @method     ChildProductQuery groupByUnit() Group by the unit column
  * @method     ChildProductQuery groupByDescription() Group by the description column
+ * @method     ChildProductQuery groupByDeleteflag() Group by the deleteFlag column
  * @method     ChildProductQuery groupByUnitPrice() Group by the unit_price column
  *
  * @method     ChildProductQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -52,6 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildProduct findOneByImg(string $img) Return the first ChildProduct filtered by the img column
  * @method     ChildProduct findOneByUnit(string $unit) Return the first ChildProduct filtered by the unit column
  * @method     ChildProduct findOneByDescription(string $description) Return the first ChildProduct filtered by the description column
+ * @method     ChildProduct findOneByDeleteflag(boolean $deleteFlag) Return the first ChildProduct filtered by the deleteFlag column
  * @method     ChildProduct findOneByUnitPrice(double $unit_price) Return the first ChildProduct filtered by the unit_price column *
 
  * @method     ChildProduct requirePk($key, ConnectionInterface $con = null) Return the ChildProduct by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -62,6 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildProduct requireOneByImg(string $img) Return the first ChildProduct filtered by the img column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildProduct requireOneByUnit(string $unit) Return the first ChildProduct filtered by the unit column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildProduct requireOneByDescription(string $description) Return the first ChildProduct filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildProduct requireOneByDeleteflag(boolean $deleteFlag) Return the first ChildProduct filtered by the deleteFlag column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildProduct requireOneByUnitPrice(double $unit_price) Return the first ChildProduct filtered by the unit_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildProduct[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildProduct objects based on current ModelCriteria
@@ -70,6 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildProduct[]|ObjectCollection findByImg(string $img) Return ChildProduct objects filtered by the img column
  * @method     ChildProduct[]|ObjectCollection findByUnit(string $unit) Return ChildProduct objects filtered by the unit column
  * @method     ChildProduct[]|ObjectCollection findByDescription(string $description) Return ChildProduct objects filtered by the description column
+ * @method     ChildProduct[]|ObjectCollection findByDeleteflag(boolean $deleteFlag) Return ChildProduct objects filtered by the deleteFlag column
  * @method     ChildProduct[]|ObjectCollection findByUnitPrice(double $unit_price) Return ChildProduct objects filtered by the unit_price column
  * @method     ChildProduct[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -163,7 +168,7 @@ abstract class ProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, img, unit, description, unit_price FROM product WHERE id = :p0';
+        $sql = 'SELECT id, name, img, unit, description, deleteFlag, unit_price FROM product WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -408,6 +413,33 @@ abstract class ProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the deleteFlag column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDeleteflag(true); // WHERE deleteFlag = true
+     * $query->filterByDeleteflag('yes'); // WHERE deleteFlag = true
+     * </code>
+     *
+     * @param     boolean|string $deleteflag The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildProductQuery The current query, for fluid interface
+     */
+    public function filterByDeleteflag($deleteflag = null, $comparison = null)
+    {
+        if (is_string($deleteflag)) {
+            $deleteflag = in_array(strtolower($deleteflag), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(ProductTableMap::COL_DELETEFLAG, $deleteflag, $comparison);
     }
 
     /**

@@ -6,8 +6,11 @@
         <column name="lastname" type="varchar" size="255" required="true" />
         <column name="email" type="varchar" size="255" required="true" />
         <column name="password" type="varchar" size="255" required="true"/>
-        <!-- values: customer, employee -->
+        <!-- values: member, employee, admin -->
         <column name="role" type="varchar" size="255" defaultValue="customer" required="true"/>
+        <unique>
+            <unique-column name="email" />
+        </unique>
     </table>
     <table name="product" phpName="Product">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
@@ -15,12 +18,14 @@
         <column name="img" type="varchar" size="128" required="true"/>
         <column name="unit" type="varchar" size="10" required="true"/>
         <column name="description" type="varchar" size="255" required="false"/>
+        <column name="deleteFlag" type="boolean" required="false" defaultValue="false"/>
         <column name="unit_price" type="float" required="true"/>
     </table>
     <!-- FIX: order is already a sql specific specifier therefore this table has a different name-->
     <table name="ordertbl" phpName="Order">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
         <column name="user_id" type="integer" required="true" />
+        <column name="status" type="varchar" size="10" defaultValue="new" />
         <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" />
         <foreign-key foreignTable="user">
             <reference local="user_id" foreign="id" />

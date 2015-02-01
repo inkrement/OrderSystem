@@ -59,7 +59,7 @@ class OrderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class OrderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
@@ -80,6 +80,11 @@ class OrderTableMap extends TableMap
      * the column name for the user_id field
      */
     const COL_USER_ID = 'ordertbl.user_id';
+
+    /**
+     * the column name for the status field
+     */
+    const COL_STATUS = 'ordertbl.status';
 
     /**
      * the column name for the datetime field
@@ -98,11 +103,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Datetime', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'datetime', ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_DATETIME, ),
-        self::TYPE_FIELDNAME     => array('id', 'user_id', 'datetime', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Status', 'Datetime', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'status', 'datetime', ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_STATUS, OrderTableMap::COL_DATETIME, ),
+        self::TYPE_FIELDNAME     => array('id', 'user_id', 'status', 'datetime', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Datetime' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'datetime' => 2, ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ID => 0, OrderTableMap::COL_USER_ID => 1, OrderTableMap::COL_DATETIME => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'datetime' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Status' => 2, 'Datetime' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'status' => 2, 'datetime' => 3, ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ID => 0, OrderTableMap::COL_USER_ID => 1, OrderTableMap::COL_STATUS => 2, OrderTableMap::COL_DATETIME => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'status' => 2, 'datetime' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -138,6 +143,7 @@ class OrderTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, null, null);
+        $this->addColumn('status', 'Status', 'VARCHAR', false, 10, 'new');
         $this->addColumn('datetime', 'Datetime', 'TIMESTAMP', false, null, 'CURRENT_TIMESTAMP');
     } // initialize()
 
@@ -305,10 +311,12 @@ class OrderTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(OrderTableMap::COL_ID);
             $criteria->addSelectColumn(OrderTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(OrderTableMap::COL_STATUS);
             $criteria->addSelectColumn(OrderTableMap::COL_DATETIME);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.datetime');
         }
     }

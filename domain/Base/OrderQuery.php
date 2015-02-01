@@ -22,10 +22,12 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOrderQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildOrderQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildOrderQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     ChildOrderQuery orderByDatetime($order = Criteria::ASC) Order by the datetime column
  *
  * @method     ChildOrderQuery groupById() Group by the id column
  * @method     ChildOrderQuery groupByUserId() Group by the user_id column
+ * @method     ChildOrderQuery groupByStatus() Group by the status column
  * @method     ChildOrderQuery groupByDatetime() Group by the datetime column
  *
  * @method     ChildOrderQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -47,6 +49,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOrder findOneById(int $id) Return the first ChildOrder filtered by the id column
  * @method     ChildOrder findOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column
+ * @method     ChildOrder findOneByStatus(string $status) Return the first ChildOrder filtered by the status column
  * @method     ChildOrder findOneByDatetime(string $datetime) Return the first ChildOrder filtered by the datetime column *
 
  * @method     ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -54,11 +57,13 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOrder requireOneById(int $id) Return the first ChildOrder filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByStatus(string $status) Return the first ChildOrder filtered by the status column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByDatetime(string $datetime) Return the first ChildOrder filtered by the datetime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @method     ChildOrder[]|ObjectCollection findById(int $id) Return ChildOrder objects filtered by the id column
  * @method     ChildOrder[]|ObjectCollection findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
+ * @method     ChildOrder[]|ObjectCollection findByStatus(string $status) Return ChildOrder objects filtered by the status column
  * @method     ChildOrder[]|ObjectCollection findByDatetime(string $datetime) Return ChildOrder objects filtered by the datetime column
  * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -152,7 +157,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, user_id, datetime FROM ordertbl WHERE id = :p0';
+        $sql = 'SELECT id, user_id, status, datetime FROM ordertbl WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -324,6 +329,35 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId, $comparison);
+    }
+
+    /**
+     * Filter the query on the status column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByStatus('fooValue');   // WHERE status = 'fooValue'
+     * $query->filterByStatus('%fooValue%'); // WHERE status LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $status The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildOrderQuery The current query, for fluid interface
+     */
+    public function filterByStatus($status = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($status)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $status)) {
+                $status = str_replace('*', '%', $status);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(OrderTableMap::COL_STATUS, $status, $comparison);
     }
 
     /**

@@ -23,7 +23,6 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * domain: set visible tag to products, add order status to order table
  * backend: add employee to login filter
  * order controller
  * product url (load images)

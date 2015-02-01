@@ -13,6 +13,7 @@ CREATE TABLE [user]
     [email] VARCHAR(255) NOT NULL,
     [password] VARCHAR(255) NOT NULL,
     [role] VARCHAR(255) DEFAULT 'customer' NOT NULL,
+    UNIQUE ([email]),
     UNIQUE ([id])
 );
 
@@ -29,6 +30,7 @@ CREATE TABLE [product]
     [img] VARCHAR(128) NOT NULL,
     [unit] VARCHAR(10) NOT NULL,
     [description] VARCHAR(255),
+    [deleteFlag] INTEGER DEFAULT 0,
     [unit_price] FLOAT NOT NULL,
     UNIQUE ([id])
 );
@@ -43,6 +45,7 @@ CREATE TABLE [ordertbl]
 (
     [id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     [user_id] INTEGER NOT NULL,
+    [status] VARCHAR(10) DEFAULT 'new',
     [datetime] TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
     UNIQUE ([id]),
     FOREIGN KEY ([user_id]) REFERENCES [user] ([id])

@@ -59,7 +59,7 @@ class ProductTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class ProductTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -97,6 +97,11 @@ class ProductTableMap extends TableMap
     const COL_DESCRIPTION = 'product.description';
 
     /**
+     * the column name for the deleteFlag field
+     */
+    const COL_DELETEFLAG = 'product.deleteFlag';
+
+    /**
      * the column name for the unit_price field
      */
     const COL_UNIT_PRICE = 'product.unit_price';
@@ -113,11 +118,11 @@ class ProductTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Img', 'Unit', 'Description', 'UnitPrice', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'img', 'unit', 'description', 'unitPrice', ),
-        self::TYPE_COLNAME       => array(ProductTableMap::COL_ID, ProductTableMap::COL_NAME, ProductTableMap::COL_IMG, ProductTableMap::COL_UNIT, ProductTableMap::COL_DESCRIPTION, ProductTableMap::COL_UNIT_PRICE, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'img', 'unit', 'description', 'unit_price', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Img', 'Unit', 'Description', 'Deleteflag', 'UnitPrice', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'img', 'unit', 'description', 'deleteflag', 'unitPrice', ),
+        self::TYPE_COLNAME       => array(ProductTableMap::COL_ID, ProductTableMap::COL_NAME, ProductTableMap::COL_IMG, ProductTableMap::COL_UNIT, ProductTableMap::COL_DESCRIPTION, ProductTableMap::COL_DELETEFLAG, ProductTableMap::COL_UNIT_PRICE, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'img', 'unit', 'description', 'deleteFlag', 'unit_price', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class ProductTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Img' => 2, 'Unit' => 3, 'Description' => 4, 'UnitPrice' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'img' => 2, 'unit' => 3, 'description' => 4, 'unitPrice' => 5, ),
-        self::TYPE_COLNAME       => array(ProductTableMap::COL_ID => 0, ProductTableMap::COL_NAME => 1, ProductTableMap::COL_IMG => 2, ProductTableMap::COL_UNIT => 3, ProductTableMap::COL_DESCRIPTION => 4, ProductTableMap::COL_UNIT_PRICE => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'img' => 2, 'unit' => 3, 'description' => 4, 'unit_price' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Img' => 2, 'Unit' => 3, 'Description' => 4, 'Deleteflag' => 5, 'UnitPrice' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'img' => 2, 'unit' => 3, 'description' => 4, 'deleteflag' => 5, 'unitPrice' => 6, ),
+        self::TYPE_COLNAME       => array(ProductTableMap::COL_ID => 0, ProductTableMap::COL_NAME => 1, ProductTableMap::COL_IMG => 2, ProductTableMap::COL_UNIT => 3, ProductTableMap::COL_DESCRIPTION => 4, ProductTableMap::COL_DELETEFLAG => 5, ProductTableMap::COL_UNIT_PRICE => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'img' => 2, 'unit' => 3, 'description' => 4, 'deleteFlag' => 5, 'unit_price' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -156,6 +161,7 @@ class ProductTableMap extends TableMap
         $this->addColumn('img', 'Img', 'VARCHAR', true, 128, null);
         $this->addColumn('unit', 'Unit', 'VARCHAR', true, 10, null);
         $this->addColumn('description', 'Description', 'VARCHAR', false, 255, null);
+        $this->addColumn('deleteFlag', 'Deleteflag', 'BOOLEAN', false, null, false);
         $this->addColumn('unit_price', 'UnitPrice', 'FLOAT', true, null, null);
     } // initialize()
 
@@ -319,6 +325,7 @@ class ProductTableMap extends TableMap
             $criteria->addSelectColumn(ProductTableMap::COL_IMG);
             $criteria->addSelectColumn(ProductTableMap::COL_UNIT);
             $criteria->addSelectColumn(ProductTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(ProductTableMap::COL_DELETEFLAG);
             $criteria->addSelectColumn(ProductTableMap::COL_UNIT_PRICE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
@@ -326,6 +333,7 @@ class ProductTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.img');
             $criteria->addSelectColumn($alias . '.unit');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.deleteFlag');
             $criteria->addSelectColumn($alias . '.unit_price');
         }
     }

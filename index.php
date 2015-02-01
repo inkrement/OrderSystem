@@ -72,10 +72,39 @@
     });
 
     $twig->addFunction($function);
-    $twig->addFunction(new Twig_SimpleFunction('isLoggedIn', function () use($app){
-        return ($app->getCookie('role') == 'member')?true: false;
+    $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($app){
+        return isAllowed($app->getCookie('role', $role));
     }));
 
+
+    /**
+     * converts right to number
+     * @param $role
+     * @return int
+     */
+    function rights($role){
+        $rights = 0;
+
+        switch($role){
+            case 'admin':
+                $rights += 100;
+            case 'employee':
+                $rights += 100;
+            case 'member':
+                $rights += 100;
+        }
+
+        return $rights;
+    }
+
+    /**
+     * @param $role
+     * @param string $min
+     * @return bool
+     */
+    function isAllowed($role, $min='member'){
+        return (rights($role) < rights($min))? false: true;
+    }
 
 
     /**
@@ -91,12 +120,24 @@
 
             $app->log->debug("auth filter for '$role' user is '$cookie_role'");
 
-            if($cookie_role != $role){
+            if(!isAllowed($cookie_role, $role)){
                 $app->flash('error', 'Login required');
                 $app->redirect('/login');
             }
         };
     };
+
+
+    /**
+     * service layer
+     */
+
+    function removeProduct($id){
+        $product = ProductQuery::create()->findPk($id);
+        if($product != null){
+
+        }
+    }
 
 
     /**
@@ -139,6 +180,16 @@
         //$app->render('test.twig', ['name' => $firstUser->getFirstName()]);
     });
 
+    $app->get('/seed', function(){
+        $user = new User();
+        $user->setRole('admin');
+        $user->setFirstname('chris');
+        $user->setLastname('hotz');
+        $user->setEmail('a');
+        $user->setPassword(password_hash('a', PASSWORD_DEFAULT));
+        $user->save();
+    });
+
     /* show products (index page) */
     $app->get('/', $authenticateForRole('member'), function () use ($app) {
         $app->render('frontend/product/list.twig', ['products'=> ProductQuery::create()->find()]);
@@ -178,7 +229,7 @@
         if($user != null && password_verify($password, $user->getPassword())){
             $app->log->info('sucessfully logged in');
 
-            $app->setCookie('role', 'member');
+            $app->setCookie('role', $user->getRole());
             $app->setCookie('userid', $user->getId());
             $app->redirect('/');
             return;
@@ -217,18 +268,18 @@
 
     /* backend */
 
-    $app->group('/backend', function () use ($app, $authenticateForRole) {
+    $app->group('/backend', $authenticateForRole('admin'), function () use ($app) {
 
         /* list */
-        $app->get('/orders', $authenticateForRole('admin'), function () use ($app) {
+        $app->get('/orders', function () use ($app) {
             $app->render('orders.twig', ['orders'=> OrderQuery::create()->find()]);
         });
 
-        $app->get('/users', $authenticateForRole('admin'), function () use ($app) {
+        $app->get('/users', function () use ($app) {
             $app->render('users.twig', ['users'=> UserQuery::create()->find()]);
         });
 
-        $app->get('/products', $authenticateForRole('admin'), function () use ($app) {
+        $app->get('/products', function () use ($app) {
             $app->render('products.twig', ['products'=> ProductQuery::create()->find()]);
         });
 

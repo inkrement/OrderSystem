@@ -1,0 +1,13 @@
+<nav>
+    <ul>
+        {% if isAllowed('admin') %}
+            <li><a href="/backend/products">Produkte</a></li>
+            <li><a href="/backend/orders">Bestellungen</a></li>
+            <li><a href="/logout">Logout</a></li>
+        {% elseif isAllowed('member') %}
+            <li><a href="/">Produkte</a></li>
+            <li><a href="/orders">Bestellungen</a></li>
+            <li><a href="/logout">Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>

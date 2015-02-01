@@ -80,6 +80,13 @@ abstract class Order implements ActiveRecordInterface
     protected $user_id;
 
     /**
+     * The value for the status field.
+     * Note: this column has a database default value of: 'new'
+     * @var        string
+     */
+    protected $status;
+
+    /**
      * The value for the datetime field.
      * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
      * @var        \DateTime
@@ -119,6 +126,7 @@ abstract class Order implements ActiveRecordInterface
      */
     public function applyDefaultValues()
     {
+        $this->status = 'new';
     }
 
     /**
@@ -361,6 +369,16 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
+     * Get the [status] column value.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [datetime] column value.
      *
      *
@@ -425,6 +443,26 @@ abstract class Order implements ActiveRecordInterface
     } // setUserId()
 
     /**
+     * Set the value of [status] column.
+     *
+     * @param  string $v new value
+     * @return $this|\Order The current object (for fluent API support)
+     */
+    public function setStatus($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[OrderTableMap::COL_STATUS] = true;
+        }
+
+        return $this;
+    } // setStatus()
+
+    /**
      * Sets the value of [datetime] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTime value.
@@ -454,6 +492,10 @@ abstract class Order implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->status !== 'new') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -486,7 +528,10 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OrderTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->status = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
             $this->datetime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
@@ -496,7 +541,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Order'), 0, $e);
@@ -734,6 +779,9 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
+        if ($this->isColumnModified(OrderTableMap::COL_STATUS)) {
+            $modifiedColumns[':p' . $index++]  = 'status';
+        }
         if ($this->isColumnModified(OrderTableMap::COL_DATETIME)) {
             $modifiedColumns[':p' . $index++]  = 'datetime';
         }
@@ -753,6 +801,9 @@ abstract class Order implements ActiveRecordInterface
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                        break;
+                    case 'status':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_STR);
                         break;
                     case 'datetime':
                         $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
@@ -826,6 +877,9 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getUserId();
                 break;
             case 2:
+                return $this->getStatus();
+                break;
+            case 3:
                 return $this->getDatetime();
                 break;
             default:
@@ -860,14 +914,15 @@ abstract class Order implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUserId(),
-            $keys[2] => $this->getDatetime(),
+            $keys[2] => $this->getStatus(),
+            $keys[3] => $this->getDatetime(),
         );
 
         $utc = new \DateTimeZone('utc');
-        if ($result[$keys[2]] instanceof \DateTime) {
+        if ($result[$keys[3]] instanceof \DateTime) {
             // When changing timezone we don't want to change existing instances
-            $dateTime = clone $result[$keys[2]];
-            $result[$keys[2]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+            $dateTime = clone $result[$keys[3]];
+            $result[$keys[3]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -947,6 +1002,9 @@ abstract class Order implements ActiveRecordInterface
                 $this->setUserId($value);
                 break;
             case 2:
+                $this->setStatus($value);
+                break;
+            case 3:
                 $this->setDatetime($value);
                 break;
         } // switch()
@@ -982,7 +1040,10 @@ abstract class Order implements ActiveRecordInterface
             $this->setUserId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setDatetime($arr[$keys[2]]);
+            $this->setStatus($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setDatetime($arr[$keys[3]]);
         }
     }
 
@@ -1030,6 +1091,9 @@ abstract class Order implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
             $criteria->add(OrderTableMap::COL_USER_ID, $this->user_id);
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_STATUS)) {
+            $criteria->add(OrderTableMap::COL_STATUS, $this->status);
         }
         if ($this->isColumnModified(OrderTableMap::COL_DATETIME)) {
             $criteria->add(OrderTableMap::COL_DATETIME, $this->datetime);
@@ -1121,6 +1185,7 @@ abstract class Order implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setUserId($this->getUserId());
+        $copyObj->setStatus($this->getStatus());
         $copyObj->setDatetime($this->getDatetime());
 
         if ($deepCopy) {
@@ -1486,6 +1551,7 @@ abstract class Order implements ActiveRecordInterface
         }
         $this->id = null;
         $this->user_id = null;
+        $this->status = null;
         $this->datetime = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

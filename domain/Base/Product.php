@@ -94,6 +94,13 @@ abstract class Product implements ActiveRecordInterface
     protected $description;
 
     /**
+     * The value for the deleteflag field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $deleteflag;
+
+    /**
      * The value for the unit_price field.
      * @var        double
      */
@@ -120,10 +127,23 @@ abstract class Product implements ActiveRecordInterface
     protected $orderPositionsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->deleteflag = false;
+    }
+
+    /**
      * Initializes internal state of Base\Product object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -387,6 +407,26 @@ abstract class Product implements ActiveRecordInterface
     }
 
     /**
+     * Get the [deleteflag] column value.
+     *
+     * @return boolean
+     */
+    public function getDeleteflag()
+    {
+        return $this->deleteflag;
+    }
+
+    /**
+     * Get the [deleteflag] column value.
+     *
+     * @return boolean
+     */
+    public function isDeleteflag()
+    {
+        return $this->getDeleteflag();
+    }
+
+    /**
      * Get the [unit_price] column value.
      *
      * @return double
@@ -497,6 +537,34 @@ abstract class Product implements ActiveRecordInterface
     } // setDescription()
 
     /**
+     * Sets the value of the [deleteflag] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\Product The current object (for fluent API support)
+     */
+    public function setDeleteflag($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->deleteflag !== $v) {
+            $this->deleteflag = $v;
+            $this->modifiedColumns[ProductTableMap::COL_DELETEFLAG] = true;
+        }
+
+        return $this;
+    } // setDeleteflag()
+
+    /**
      * Set the value of [unit_price] column.
      *
      * @param  double $v new value
@@ -526,6 +594,10 @@ abstract class Product implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->deleteflag !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -567,7 +639,10 @@ abstract class Product implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ProductTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ProductTableMap::translateFieldName('UnitPrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ProductTableMap::translateFieldName('Deleteflag', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->deleteflag = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ProductTableMap::translateFieldName('UnitPrice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->unit_price = (null !== $col) ? (double) $col : null;
             $this->resetModified();
 
@@ -577,7 +652,7 @@ abstract class Product implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = ProductTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = ProductTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Product'), 0, $e);
@@ -808,6 +883,9 @@ abstract class Product implements ActiveRecordInterface
         if ($this->isColumnModified(ProductTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
+        if ($this->isColumnModified(ProductTableMap::COL_DELETEFLAG)) {
+            $modifiedColumns[':p' . $index++]  = 'deleteFlag';
+        }
         if ($this->isColumnModified(ProductTableMap::COL_UNIT_PRICE)) {
             $modifiedColumns[':p' . $index++]  = 'unit_price';
         }
@@ -836,6 +914,9 @@ abstract class Product implements ActiveRecordInterface
                         break;
                     case 'description':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'deleteFlag':
+                        $stmt->bindValue($identifier, $this->deleteflag, PDO::PARAM_BOOL);
                         break;
                     case 'unit_price':
                         $stmt->bindValue($identifier, $this->unit_price, PDO::PARAM_STR);
@@ -918,6 +999,9 @@ abstract class Product implements ActiveRecordInterface
                 return $this->getDescription();
                 break;
             case 5:
+                return $this->getDeleteflag();
+                break;
+            case 6:
                 return $this->getUnitPrice();
                 break;
             default:
@@ -955,7 +1039,8 @@ abstract class Product implements ActiveRecordInterface
             $keys[2] => $this->getImg(),
             $keys[3] => $this->getUnit(),
             $keys[4] => $this->getDescription(),
-            $keys[5] => $this->getUnitPrice(),
+            $keys[5] => $this->getDeleteflag(),
+            $keys[6] => $this->getUnitPrice(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1028,6 +1113,9 @@ abstract class Product implements ActiveRecordInterface
                 $this->setDescription($value);
                 break;
             case 5:
+                $this->setDeleteflag($value);
+                break;
+            case 6:
                 $this->setUnitPrice($value);
                 break;
         } // switch()
@@ -1072,7 +1160,10 @@ abstract class Product implements ActiveRecordInterface
             $this->setDescription($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUnitPrice($arr[$keys[5]]);
+            $this->setDeleteflag($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setUnitPrice($arr[$keys[6]]);
         }
     }
 
@@ -1129,6 +1220,9 @@ abstract class Product implements ActiveRecordInterface
         }
         if ($this->isColumnModified(ProductTableMap::COL_DESCRIPTION)) {
             $criteria->add(ProductTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(ProductTableMap::COL_DELETEFLAG)) {
+            $criteria->add(ProductTableMap::COL_DELETEFLAG, $this->deleteflag);
         }
         if ($this->isColumnModified(ProductTableMap::COL_UNIT_PRICE)) {
             $criteria->add(ProductTableMap::COL_UNIT_PRICE, $this->unit_price);
@@ -1223,6 +1317,7 @@ abstract class Product implements ActiveRecordInterface
         $copyObj->setImg($this->getImg());
         $copyObj->setUnit($this->getUnit());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setDeleteflag($this->getDeleteflag());
         $copyObj->setUnitPrice($this->getUnitPrice());
 
         if ($deepCopy) {
@@ -1537,9 +1632,11 @@ abstract class Product implements ActiveRecordInterface
         $this->img = null;
         $this->unit = null;
         $this->description = null;
+        $this->deleteflag = null;
         $this->unit_price = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
