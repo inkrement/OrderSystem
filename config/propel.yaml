@@ -3,7 +3,9 @@ propel:
     connections:
       shop:
         adapter: sqlite
-        classname: Propel\Runtime\Connection\ConnectionWrapper
+        # use the following config for production profile
+        # classname: Propel\Runtime\Connection\ConnectionWrapper
+        classname: Propel\Runtime\Connection\DebugPDO
         dsn: "sqlite:shop.db"
         user: "chris"
         password: "somepassword"
@@ -11,6 +13,14 @@ propel:
           charset: utf8
   runtime:
       defaultConnection: shop
+      log:
+        defaultLogger:
+          type: stream
+          path: log/propel.log
+          level: 300
+        shop:
+          type: stream
+          path: log/propel_shop.log
       connections:
           - shop
   generator:

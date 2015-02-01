@@ -3,7 +3,8 @@
         "slim/slim": "2.*",
         "slim/views": "dev-master",
         "twig/twig": "1.*",
-        "propel/propel": "~2.0@dev"
+        "propel/propel": "~2.0@dev",
+        "monolog/monolog": "1.12.*@dev"
     },
 
     "autoload": {

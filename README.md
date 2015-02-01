@@ -23,8 +23,9 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * password hashing
- * order
+ * view orders and change view by user role
+ * add employee to login filter
+ * order controller
 
 ## Developer Info
 
