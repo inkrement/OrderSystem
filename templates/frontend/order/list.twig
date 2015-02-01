@@ -1,0 +1,30 @@
+{% extends 'master.twig' %}
+
+{% block title %}Bestellungen{% endblock %}
+
+{% block content %}
+
+    <h1>Orders</h1>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>date</th>
+            <th>amount</th>
+            <th>operations</th>
+        </tr>
+
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.getId() }}</td>
+                <td>{{ order.datetime().format("Y-m-d H:i:s") }}</td>
+                <td>{{ order_sum(order.getId()) }}</td>
+                <td>
+                    <a href="/orders/{{ order.getId() }}">show</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

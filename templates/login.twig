@@ -9,7 +9,7 @@
     {% import "components/forms.twig" as forms %}
 
     {{ error }}
-    <form name="login" action="login" method="post">
+    <form name="login" action="{{ currentUrl() }}" method="post">
         {{ forms.input('username') }}
         {{ forms.input('password') }}
         <input type="submit" value="login">

@@ -23,9 +23,18 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * view orders and change view by user role
- * add employee to login filter
+ * domain: set visible tag to products, add order status to order table
+ * backend: add employee to login filter
  * order controller
+ * product url (load images)
+ * frontend: cart
+ * frontend: edit order (positions)
+ * frontend: delete order
+ * backend: add customer
+ * backend: remove customer
+ * backend: list customers
+ * backend: add product
+ * backend: remove product (set unvisible)
 
 ## Developer Info
 

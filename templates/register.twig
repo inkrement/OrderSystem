@@ -10,10 +10,10 @@
 
     {{ error }}
     <form name="register" action="register" method="post">
-        {{ forms.input('firstname') }}
-        {{ forms.input('lastname') }}
-        {{ forms.input('email') }}
-        {{ forms.input('password') }}
+        <p>Firstname: {{ forms.input('firstname') }}</p>
+        <p>Lastname: {{ forms.input('lastname') }}</p>
+        <p>Email: {{ forms.input('email') }}</p>
+        <p>Password: {{ forms.input('password') }}</p>
         <input type="submit" value="register">
     </form>
 

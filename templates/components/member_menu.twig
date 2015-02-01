@@ -1,0 +1,11 @@
+<nav>
+    <ul>
+        {% if isLoggedIn() %}
+        <li><a href="/">Produkte</a></li>
+        <li><a href="/orders">Bestellungen</a></li>
+        <li><a href="/logout">Logout</a></li>
+        {% else %}
+            please login
+        {% endif %}
+    </ul>
+</nav>

@@ -39,6 +39,7 @@
      */
     $view = $app->view(new \Slim\Views\Twig());
     $view->parserOptions = array(
+        'debug' => true,
         'charset' => 'utf-8',
         'cache' => realpath('./templates/cache'),
         'auto_reload' => true,
@@ -47,6 +48,34 @@
     );
     $app->view->parserExtensions = array(new \Slim\Views\TwigExtension());
     $view->parserDirectory = 'Twig';
+
+    /**
+     * register twig specific functions
+     */
+    $twig = $app->view->getEnvironment();
+    $function = new Twig_SimpleFunction('order_sum', function ($orderId) use($app){
+        $app->log->debug("sum order value for order '$orderId'");
+
+        $orderpositions = OrderPositionQuery::create()->findByOrderId($orderId);
+
+        $sum = 0.0;
+
+        foreach($orderpositions as $position){
+            $quantity = $position->getQuantity();
+            $unitprice = $position->getProduct()->getUnitPrice();
+
+            $app->log->debug("found new position quantity: '$quantity' unitprice: '$unitprice'");
+            $sum += $quantity * $unitprice;
+        }
+
+        return $sum;
+    });
+
+    $twig->addFunction($function);
+    $twig->addFunction(new Twig_SimpleFunction('isLoggedIn', function () use($app){
+        return ($app->getCookie('role') == 'member')?true: false;
+    }));
+
 
 
     /**
@@ -81,9 +110,12 @@
         $user->setEmail('example@test.com');
         $user->setPassword(password_hash("1234", PASSWORD_DEFAULT));
 
-
         $order = new Order();
         $order->setUser($user);
+        $order->getUser()->getFirstname();
+        //$order->getOrderPositions();
+        //$order->getOrderPositions()->
+        //$order->getDatetime()->format("Y-m-d H:i:s");
         $order->save();
 
         /*
@@ -92,13 +124,14 @@
         $product->setUnitPrice(12.2);
         $product->save();
         */
-        /*
+
         $order_position = new OrderPosition();
         $order_position->setProductId(ProductQuery::create()->findPk(1));
         $order_position->setQuantity(2);
         $order_position->setOrder($order);
+        //$order_position->getQuantity();
         $order_position->save();
-        */
+
 
         //$q = new UserQuery();
         //$firstUser = $q->findPK(1);
@@ -108,11 +141,22 @@
 
     /* show products (index page) */
     $app->get('/', $authenticateForRole('member'), function () use ($app) {
-        $app->render('productlist.twig', ['products'=> ProductQuery::create()->find()]);
+        $app->render('frontend/product/list.twig', ['products'=> ProductQuery::create()->find()]);
     });
 
-    $app->get('/orders', $authenticateForRole('member'), function () use ($app) {
-        $app->render('orders.twig', ['orders'=> OrderQuery::create()->find()]);
+    $app->group('/orders', $authenticateForRole('member'), function() use($app){
+
+        $app->get('/', function () use ($app) {
+            $userid = $app->getCookie('userid');
+            $app->render('frontend/order/list.twig', ['orders'=> OrderQuery::create()->findByUserId($userid)]);
+        });
+
+        $app->get('/:orderId', function ($orderId) use ($app) {
+            //TODO: check permissions
+
+            $app->render('frontend/order/show.twig', ['order'=> OrderQuery::create()->findPk($orderId)]);
+        });
+
     });
 
 
@@ -135,6 +179,7 @@
             $app->log->info('sucessfully logged in');
 
             $app->setCookie('role', 'member');
+            $app->setCookie('userid', $user->getId());
             $app->redirect('/');
             return;
         }
@@ -146,6 +191,7 @@
 
     $app->get('/logout', function () use ($app) {
         $app->deleteCookie('role');
+        $app->deleteCookie('userid');
         $app->redirect('/login');
     });
 
@@ -166,6 +212,26 @@
         $user->save();
 
         $app->redirect('/login');
+    });
+
+
+    /* backend */
+
+    $app->group('/backend', function () use ($app, $authenticateForRole) {
+
+        /* list */
+        $app->get('/orders', $authenticateForRole('admin'), function () use ($app) {
+            $app->render('orders.twig', ['orders'=> OrderQuery::create()->find()]);
+        });
+
+        $app->get('/users', $authenticateForRole('admin'), function () use ($app) {
+            $app->render('users.twig', ['users'=> UserQuery::create()->find()]);
+        });
+
+        $app->get('/products', $authenticateForRole('admin'), function () use ($app) {
+            $app->render('products.twig', ['products'=> ProductQuery::create()->find()]);
+        });
+
     });
 
 

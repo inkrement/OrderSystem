@@ -1,4 +1,4 @@
-{% extends "master.twig" %}
+{% extends 'master.twig' %}
 
 {% block title %}Bestellungen{% endblock %}
 
@@ -9,15 +9,15 @@
     <table>
         <tr>
             <th>Kunde</th>
-            <th>Produkt</th>
             <th>Datum</th>
+            <th>Summe</th>
         </tr>
 
         {% for order in orders %}
             <tr>
-                <td>{{ order.getName() }}</td>
-                <td>{{ order.description() }}</td>
-                <td>{{ order.getUnitPrice() }}</td>
+                <td>{{ order.getUser().getFirstname() }} {{ order.getUser().getLastname() }}</td>
+                <td>{{ order.datetime().format("Y-m-d H:i:s") }}</td>
+                <td>{{ order_sum(order.getId()) }}</td>
             </tr>
         {% endfor %}
 
