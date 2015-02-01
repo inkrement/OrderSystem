@@ -988,7 +988,7 @@ abstract class User implements ActiveRecordInterface
                         $key = 'orders';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'orders';
+                        $key = 'ordertbls';
                         break;
                     default:
                         $key = 'Orders';

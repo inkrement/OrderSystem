@@ -142,7 +142,7 @@ class OrderPositionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'order', 'id', true, null, null);
+        $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'ordertbl', 'id', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);
         $this->addColumn('quantity', 'Quantity', 'INTEGER', true, null, null);
     } // initialize()

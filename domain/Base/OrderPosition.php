@@ -886,7 +886,7 @@ abstract class OrderPosition implements ActiveRecordInterface
                         $key = 'order';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'order';
+                        $key = 'ordertbl';
                         break;
                     default:
                         $key = 'Order';

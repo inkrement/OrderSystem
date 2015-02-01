@@ -3,7 +3,7 @@
 use Base\Order as BaseOrder;
 
 /**
- * Skeleton subclass for representing a row from the 'order' table.
+ * Skeleton subclass for representing a row from the 'ordertbl' table.
  *
  *
  *

@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'order' table.
+ * This class defines the structure of the 'ordertbl' table.
  *
  *
  *
@@ -44,7 +44,7 @@ class OrderTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'order';
+    const TABLE_NAME = 'ordertbl';
 
     /**
      * The related Propel class for this table
@@ -74,17 +74,17 @@ class OrderTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'order.id';
+    const COL_ID = 'ordertbl.id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'order.user_id';
+    const COL_USER_ID = 'ordertbl.user_id';
 
     /**
      * the column name for the datetime field
      */
-    const COL_DATETIME = 'order.datetime';
+    const COL_DATETIME = 'ordertbl.datetime';
 
     /**
      * The default string format for model objects of the related table
@@ -129,7 +129,7 @@ class OrderTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('order');
+        $this->setName('ordertbl');
         $this->setPhpName('Order');
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Order');
@@ -378,7 +378,7 @@ class OrderTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the order table.
+     * Deletes all rows from the ordertbl table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).

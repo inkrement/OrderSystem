@@ -34,12 +34,12 @@ CREATE TABLE [product]
 );
 
 -----------------------------------------------------------------------
--- order
+-- ordertbl
 -----------------------------------------------------------------------
 
-DROP TABLE IF EXISTS [order];
+DROP TABLE IF EXISTS [ordertbl];
 
-CREATE TABLE [order]
+CREATE TABLE [ordertbl]
 (
     [id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     [user_id] INTEGER NOT NULL,
@@ -61,6 +61,6 @@ CREATE TABLE [orderposition]
     [product_id] INTEGER NOT NULL,
     [quantity] INTEGER NOT NULL,
     UNIQUE ([id]),
-    FOREIGN KEY ([order_id]) REFERENCES [order] ([id]),
+    FOREIGN KEY ([order_id]) REFERENCES [ordertbl] ([id]),
     FOREIGN KEY ([product_id]) REFERENCES [product] ([id])
 );

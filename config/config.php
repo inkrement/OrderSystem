@@ -22,9 +22,10 @@ $serviceContainer->setDefaultDatasource('shop');
 $serviceContainer->setLoggerConfiguration('defaultLogger', array (
   'type' => 'stream',
   'path' => 'log/propel.log',
-  'level' => 300,
+  'level' => 100,
 ));
 $serviceContainer->setLoggerConfiguration('shop', array (
   'type' => 'stream',
   'path' => 'log/propel_shop.log',
+  'level' => 100,
 ));

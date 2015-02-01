@@ -3,7 +3,7 @@
 use Base\OrderQuery as BaseOrderQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'order' table.
+ * Skeleton subclass for performing query and update operations on the 'ordertbl' table.
  *
  *
  *
