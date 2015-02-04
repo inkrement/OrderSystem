@@ -1,6 +1,6 @@
 {% extends 'master.twig' %}
 
-{% block title %}Bestellungen{% endblock %}
+{% block title %}Benutzer{% endblock %}
 
 {% block content %}
 
@@ -23,9 +23,12 @@
                     <td>{{ user.getEmail() }}</td>
                     <td>{{ user.getRole() }}</td>
                     <td>
-                        <a class="btn btn-danger" href="/backend/delete/id">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </a>
+                        <form action="/backend/users/{{ user.getId() }}" method="post">
+                            <input type="hidden" name="_METHOD" value="DELETE"/>
+                            <button type="submit" value="submit">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

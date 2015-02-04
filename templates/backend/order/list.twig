@@ -23,9 +23,12 @@
                     <td>{{ order.datetime().format("Y-m-d H:i:s") }}</td>
                     <td>{{ order.getStatus() }}</td>
                     <td>
-                        <a class="btn btn-danger" href="/backend/delete/id">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </a>
+                        <form action="/backend/orders/{{ order.getId() }}" method="post">
+                            <input type="hidden" name="_METHOD" value="DELETE"/>
+                            <button type="submit" value="submit">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

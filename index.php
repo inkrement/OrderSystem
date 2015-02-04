@@ -276,10 +276,28 @@
         });
 
         $app->get('/products', function () use ($app) {
-            $app->render('backend/product/list.twig', ['products'=> ProductQuery::create()->find()]);
+            $app->render('backend/product/list.twig', ['products'=> ProductQuery::create()->findByDeleteflag(false)]);
         });
 
         $app->get('/users', function () use ($app) {
+            $app->render('backend/user/list.twig', ['users'=> UserQuery::create()->find()]);
+        });
+
+        //delete routes
+        $app->delete('/orders/:id', function ($id) use ($app) {
+            OrderQuery::create()->findPk($id)->delete();
+            $app->render('/backend/order/list.twig', ['orders'=> OrderQuery::create()->find()]);
+        });
+
+        $app->delete('/products/:id', function ($id) use ($app) {
+            $product = ProductQuery::create()->findPk($id);
+            $product->setDeleteflag(true);
+            $product->save();
+            $app->render('backend/product/list.twig', ['products'=> ProductQuery::create()->findByDeleteflag(false)]);
+        });
+
+        $app->delete('/users/:id', function ($id) use ($app) {
+            UserQuery::create()->findPk($id)->delete();
             $app->render('backend/user/list.twig', ['users'=> UserQuery::create()->find()]);
         });
 

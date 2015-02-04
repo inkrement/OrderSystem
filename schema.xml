@@ -28,7 +28,7 @@
         <column name="status" type="varchar" size="10" defaultValue="new" />
         <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" />
         <foreign-key foreignTable="user">
-            <reference local="user_id" foreign="id" />
+            <reference local="user_id" foreign="id" onDelete="CASCADE" />
         </foreign-key>
     </table>
     <table name="orderposition" phpName="OrderPosition">
@@ -37,7 +37,8 @@
         <column name="product_id" type="integer" required="true"/>
         <column name="quantity" type="integer" required="true"/>
         <foreign-key foreignTable="ordertbl">
-            <reference local="order_id" foreign="id" />
+            <!-- remove orderposition if order is removed -->
+            <reference local="order_id" foreign="id" onDelete="CASCADE" />
         </foreign-key>
         <foreign-key foreignTable="product">
             <reference local="product_id" foreign="id" />
