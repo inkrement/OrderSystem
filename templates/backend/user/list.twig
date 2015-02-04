@@ -5,23 +5,23 @@
 {% block content %}
 
     <div class="well">
-        <h1>Bestell&uuml;bersicht</h1>
+        <h1>Benutzer&uuml;bersicht</h1>
 
         <table class="table table-striped">
             <tr>
-                <th>Kunde</th>
-                <th>Summe</th>
-                <th>Datum</th>
-                <th>Status</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Email</th>
+                <th>Rechte</th>
                 <th>Optionen</th>
             </tr>
 
-            {% for order in orders %}
+            {% for user in users %}
                 <tr>
-                    <td>{{ order.getUser().getFirstname() }} {{ order.getUser().getLastname() }}</td>
-                    <td>{{ order_sum(order.getId()) }}</td>
-                    <td>{{ order.datetime().format("Y-m-d H:i:s") }}</td>
-                    <td>{{ order.getStatus() }}</td>
+                    <td>{{ user.getFirstname() }}</td>
+                    <td>{{ user.getLastname() }}</td>
+                    <td>{{ user.getEmail() }}</td>
+                    <td>{{ user.getRole() }}</td>
                     <td>
                         <a class="btn btn-danger" href="/backend/delete/id">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

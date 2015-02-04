@@ -272,15 +272,15 @@
 
         /* list */
         $app->get('/orders', function () use ($app) {
-            $app->render('orders.twig', ['orders'=> OrderQuery::create()->find()]);
-        });
-
-        $app->get('/users', function () use ($app) {
-            $app->render('users.twig', ['users'=> UserQuery::create()->find()]);
+            $app->render('/backend/order/list.twig', ['orders'=> OrderQuery::create()->find()]);
         });
 
         $app->get('/products', function () use ($app) {
-            $app->render('products.twig', ['products'=> ProductQuery::create()->find()]);
+            $app->render('backend/product/list.twig', ['products'=> ProductQuery::create()->find()]);
+        });
+
+        $app->get('/users', function () use ($app) {
+            $app->render('backend/user/list.twig', ['users'=> UserQuery::create()->find()]);
         });
 
     });

@@ -5,23 +5,26 @@
 {% block content %}
 
     <div class="well">
-        <h1>Bestell&uuml;bersicht</h1>
+        <h1>Produkte</h1>
 
         <table class="table table-striped">
             <tr>
-                <th>Kunde</th>
-                <th>Summe</th>
-                <th>Datum</th>
-                <th>Status</th>
-                <th>Optionen</th>
+                <th>bild</th>
+                <th>name</th>
+                <th>beschreibung</th>
+                <th>preis</th>
+                <th>optionen</th>
             </tr>
 
-            {% for order in orders %}
+            {% for product in products %}
                 <tr>
-                    <td>{{ order.getUser().getFirstname() }} {{ order.getUser().getLastname() }}</td>
-                    <td>{{ order_sum(order.getId()) }}</td>
-                    <td>{{ order.datetime().format("Y-m-d H:i:s") }}</td>
-                    <td>{{ order.getStatus() }}</td>
+                    <td>
+                        <img src="http://placehold.it/350x150">
+                    </td>
+                    <td>{{ product.getName() }}</td>
+                    <td>{{ product.description() }}</td>
+                    <td>{{ product.getUnitPrice() }}</td>
+
                     <td>
                         <a class="btn btn-danger" href="/backend/delete/id">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
