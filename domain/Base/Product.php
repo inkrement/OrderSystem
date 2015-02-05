@@ -439,7 +439,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setId($v)
@@ -459,7 +459,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [name] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setName($v)
@@ -479,7 +479,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [img] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setImg($v)
@@ -499,7 +499,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [unit] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setUnit($v)
@@ -519,7 +519,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [description] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setDescription($v)
@@ -567,7 +567,7 @@ abstract class Product implements ActiveRecordInterface
     /**
      * Set the value of [unit_price] column.
      *
-     * @param  double $v new value
+     * @param double $v new value
      * @return $this|\Product The current object (for fluent API support)
      */
     public function setUnitPrice($v)

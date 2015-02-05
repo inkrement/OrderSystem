@@ -9,176 +9,13 @@
 
     require 'vendor/autoload.php';
     require_once './config/config.php';
-
-    //HOTFIX: to remove warning
-    date_default_timezone_set('Europe/Vienna');
-
-    /**
-     * app configuration
-     */
-    $app = new \Slim\Slim([
-        'debug' => true,
-        'templates.path' => './templates',
-        'log.level' => \Slim\Log::DEBUG
-    ]);
-
-    $app->add(new \Slim\Middleware\SessionCookie(array(
-        'expires' => '20 minutes',
-        'path' => '/',
-        'domain' => null,
-        'secure' => false,
-        'httponly' => false,
-        'name' => 'slim_session',
-        'secret' => 'SomeSuperSecretValue',
-        'cipher' => MCRYPT_RIJNDAEL_256,
-        'cipher_mode' => MCRYPT_MODE_CBC
-    )));
-
-    /**
-     * setup template engine
-     */
-    $view = $app->view(new \Slim\Views\Twig());
-    $view->parserOptions = array(
-        'debug' => true,
-        'charset' => 'utf-8',
-        'cache' => realpath('./templates/cache'),
-        'auto_reload' => true,
-        'strict_variables' => false,
-        'autoescape' => true
-    );
-    $app->view->parserExtensions = array(new \Slim\Views\TwigExtension());
-    $view->parserDirectory = 'Twig';
-
-    /**
-     * register twig specific functions
-     */
-    $twig = $app->view->getEnvironment();
-    $function = new Twig_SimpleFunction('order_sum', function ($orderId) use($app){
-        $app->log->debug("sum order value for order '$orderId'");
-
-        $orderpositions = OrderPositionQuery::create()->findByOrderId($orderId);
-
-        $sum = 0.0;
-
-        foreach($orderpositions as $position){
-            $quantity = $position->getQuantity();
-            $unitprice = $position->getProduct()->getUnitPrice();
-
-            $app->log->debug("found new position quantity: '$quantity' unitprice: '$unitprice'");
-            $sum += $quantity * $unitprice;
-        }
-
-        return $sum;
-    });
-
-    $twig->addFunction($function);
-    $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($app){
-        return isAllowed($app->getCookie('role', $role));
-    }));
-
-
-    /**
-     * converts right to number
-     * @param $role
-     * @return int
-     */
-    function rights($role){
-        $rights = 0;
-
-        switch($role){
-            case 'admin':
-                $rights += 100;
-            case 'employee':
-                $rights += 100;
-            case 'member':
-                $rights += 100;
-        }
-
-        return $rights;
-    }
-
-    /**
-     * @param $role
-     * @param string $min
-     * @return bool
-     */
-    function isAllowed($role, $min='member'){
-        return (rights($role) < rights($min))? false: true;
-    }
-
-
-    /**
-     * auth filter. so called middleware
-     *
-     * @param string $role
-     * @return callable
-     */
-    $authenticateForRole = function ( $role = 'member' ) {
-        return function () use ( $role ) {
-            $app = \Slim\Slim::getInstance();
-            $cookie_role = $app->getCookie('role');
-
-            $app->log->debug("auth filter for '$role' user is '$cookie_role'");
-
-            if(!isAllowed($cookie_role, $role)){
-                $app->flash('error', 'Login required');
-                $app->redirect('/login');
-            }
-        };
-    };
-
-
-    /**
-     * service layer
-     */
-
-    function removeProduct($id){
-        $product = ProductQuery::create()->findPk($id);
-        if($product != null){
-
-        }
-    }
+    require_once './config/php_settings.php';
+    require_once 'bootstrap.php';
 
 
     /**
      * Routes
      */
-    $app->get('/test', function () use ($app) {
-
-        $user = new User();
-        $user->setFirstName('Chris');
-        $user->setLastName('somename');
-        $user->setEmail('example@test.com');
-        $user->setPassword(password_hash("1234", PASSWORD_DEFAULT));
-
-        $order = new Order();
-        $order->setUser($user);
-        $order->getUser()->getFirstname();
-        //$order->getOrderPositions();
-        //$order->getOrderPositions()->
-        //$order->getDatetime()->format("Y-m-d H:i:s");
-        $order->save();
-
-        /*
-        $product = new Product();
-        $product->setName("asd");
-        $product->setUnitPrice(12.2);
-        $product->save();
-        */
-
-        $order_position = new OrderPosition();
-        $order_position->setProductId(ProductQuery::create()->findPk(1));
-        $order_position->setQuantity(2);
-        $order_position->setOrder($order);
-        //$order_position->getQuantity();
-        $order_position->save();
-
-
-        //$q = new UserQuery();
-        //$firstUser = $q->findPK(1);
-
-        //$app->render('test.twig', ['name' => $firstUser->getFirstName()]);
-    });
 
     $app->get('/seed', function(){
         $user = new User();
@@ -188,6 +25,35 @@
         $user->setEmail('a');
         $user->setPassword(password_hash('a', PASSWORD_DEFAULT));
         $user->save();
+
+        $order = new Order();
+        $order->setUser($user);
+        $order->save();
+
+        $product = new Product();
+        $product->setName("Kartoffel");
+        $product->setDescription("Irgendwelche Veggy Pflanzen");
+        $product->setUnitPrice(12.2);
+        $product->save();
+
+        $product2 = new Product();
+        $product2->setName("Rindfleisch");
+        $product2->setDescription("Steak");
+        $product2->setUnitPrice(43.2);
+        $product2->save();
+
+        $order_position = new OrderPosition();
+        $order_position->setProductId($product);
+        $order_position->setQuantity(2);
+        $order_position->setOrder($order);
+        $order_position->save();
+
+        $order_position = new OrderPosition();
+        $order_position->setProductId($product2);
+        $order_position->setQuantity(4);
+        $order_position->setOrder($order);
+        $order_position->save();
+
     });
 
     /* show products (index page) */
@@ -303,7 +169,4 @@
 
     });
 
-
-
     $app->run();
-?>

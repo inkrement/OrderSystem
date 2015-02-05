@@ -365,7 +365,7 @@ abstract class OrderPosition implements ActiveRecordInterface
     /**
      * Set the value of [id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\OrderPosition The current object (for fluent API support)
      */
     public function setId($v)
@@ -385,7 +385,7 @@ abstract class OrderPosition implements ActiveRecordInterface
     /**
      * Set the value of [order_id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\OrderPosition The current object (for fluent API support)
      */
     public function setOrderId($v)
@@ -409,7 +409,7 @@ abstract class OrderPosition implements ActiveRecordInterface
     /**
      * Set the value of [product_id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\OrderPosition The current object (for fluent API support)
      */
     public function setProductId($v)
@@ -433,7 +433,7 @@ abstract class OrderPosition implements ActiveRecordInterface
     /**
      * Set the value of [quantity] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\OrderPosition The current object (for fluent API support)
      */
     public function setQuantity($v)

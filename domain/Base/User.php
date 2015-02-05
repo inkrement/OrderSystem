@@ -413,7 +413,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setId($v)
@@ -433,7 +433,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [firstname] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setFirstname($v)
@@ -453,7 +453,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [lastname] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setLastname($v)
@@ -473,7 +473,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [email] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setEmail($v)
@@ -493,7 +493,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [password] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setPassword($v)
@@ -513,7 +513,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [role] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
     public function setRole($v)

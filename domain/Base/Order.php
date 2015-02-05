@@ -401,7 +401,7 @@ abstract class Order implements ActiveRecordInterface
     /**
      * Set the value of [id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\Order The current object (for fluent API support)
      */
     public function setId($v)
@@ -421,7 +421,7 @@ abstract class Order implements ActiveRecordInterface
     /**
      * Set the value of [user_id] column.
      *
-     * @param  int $v new value
+     * @param int $v new value
      * @return $this|\Order The current object (for fluent API support)
      */
     public function setUserId($v)
@@ -445,7 +445,7 @@ abstract class Order implements ActiveRecordInterface
     /**
      * Set the value of [status] column.
      *
-     * @param  string $v new value
+     * @param string $v new value
      * @return $this|\Order The current object (for fluent API support)
      */
     public function setStatus($v)
