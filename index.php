@@ -220,6 +220,30 @@
             $app->render('/backend/order/show.twig', ['order'=> OrderQuery::create()->findById($id)->getFirst()]);
         });
 
+        //add
+        $app->get('/products/new', function () use ($app) {
+            $app->render('backend/product/new.twig', []);
+        });
+
+        $app->post('/products/new', function () use ($app){
+            $post = $app->request()->post();
+
+            $name = uniqid('img-'.date('Ymd').'-');
+
+            $image = new \Eventviva\ImageResize($_FILES['inputPicture']['tmp_name']);
+            $image->resizeToWidth(300);
+            $image->save('templates/img/' . $name);
+
+            $product = new Product();
+            $product->setImg($name);
+            $product->setName($post['inputName']);
+            $product->setUnitPrice($post['inputUnitPrice']);
+            $product->setDescription($post['inputDescription']);
+            $product->save();
+
+            $app->redirect('/backend/products');
+        });
+
     });
 
     $app->run();

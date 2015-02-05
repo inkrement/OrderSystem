@@ -7,6 +7,10 @@
     <div class="well">
         <h1>Produkte</h1>
 
+        <nav>
+            <a href="/backend/products/new" class="btn btn-primary">add product</a>
+        </nav>
+
         <table class="table table-striped">
             <tr>
                 <th>bild</th>
@@ -19,7 +23,7 @@
             {% for product in products %}
                 <tr>
                     <td>
-                        <img src="http://placehold.it/350x150">
+                        <img src="/templates/img/{{ product.getImg() }}">
                     </td>
                     <td>{{ product.getName() }}</td>
                     <td>{{ product.description() }}</td>

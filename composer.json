@@ -3,12 +3,13 @@
     "description" : "minimalsitic shop written in php",
     "version" : "1.0.0",
     "require": {
-	"php": ">=5.5",
+	    "php": ">=5.5",
         "slim/slim": "2.*",
         "slim/views": "dev-master",
         "twig/twig": "1.*",
         "propel/propel": "~2.0@dev",
-        "monolog/monolog": "1.12.*@dev"
+        "monolog/monolog": "1.12.*@dev",
+        "eventviva/php-image-resize": "1.2.*"
     },
 
     "autoload": {
