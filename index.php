@@ -23,6 +23,9 @@
         $user->setFirstname('chris');
         $user->setLastname('hotz');
         $user->setEmail('a');
+        $user->setCity('Wien');
+        $user->setPlz(1040);
+        $user->setPhone('004369911602033');
         $user->setPassword(password_hash('a', PASSWORD_DEFAULT));
         $user->save();
 
@@ -31,6 +34,9 @@
         $user->setFirstname('andrea');
         $user->setLastname('musterfrau');
         $user->setEmail('peter@musterfrau.at');
+        $user->setCity('Wien');
+        $user->setPlz(1140);
+        $user->setPhone('004369911602033');
         $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
         $user->save();
 
@@ -39,6 +45,9 @@
         $user->setFirstname('peter');
         $user->setLastname('mustermann');
         $user->setEmail('peter@mustermann.at');
+        $user->setCity('Wien');
+        $user->setPlz(1090);
+        $user->setPhone('004369911602033');
         $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
         $user->save();
 
@@ -68,19 +77,19 @@
         $product3->save();
 
         $order_position = new OrderPosition();
-        $order_position->setProductId($product);
+        $order_position->setProduct($product);
         $order_position->setQuantity(2);
         $order_position->setOrder($order);
         $order_position->save();
 
         $order_position = new OrderPosition();
-        $order_position->setProductId($product2);
+        $order_position->setProduct($product2);
         $order_position->setQuantity(4);
         $order_position->setOrder($order);
         $order_position->save();
 
         $order_position = new OrderPosition();
-        $order_position->setProductId($product3);
+        $order_position->setProduct($product3);
         $order_position->setQuantity(10);
         $order_position->setOrder($order);
         $order_position->save();
@@ -190,7 +199,7 @@
 
         //delete routes
         $app->delete('/orders/:id', function ($id) use ($app) {
-            OrderQuery::create()->findPk($id)->delete();
+            OrderQuery::create()->findById($id)->delete();
             $app->render('/backend/order/list.twig', ['orders'=> OrderQuery::create()->find()]);
         });
 
@@ -204,6 +213,11 @@
         $app->delete('/users/:id', function ($id) use ($app) {
             UserQuery::create()->findPk($id)->delete();
             $app->render('backend/user/list.twig', ['users'=> UserQuery::create()->find()]);
+        });
+
+        //show
+        $app->get('/orders/:id', function ($id) use ($app) {
+            $app->render('/backend/order/show.twig', ['order'=> OrderQuery::create()->findById($id)->getFirst()]);
         });
 
     });

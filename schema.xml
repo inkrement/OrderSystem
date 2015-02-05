@@ -6,6 +6,11 @@
         <column name="lastname" type="varchar" size="255" required="true" />
         <column name="email" type="varchar" size="255" required="true" />
         <column name="password" type="varchar" size="255" required="true"/>
+
+        <column name="phone" type="varchar" size="255" required="true"/>
+        <column name="plz" type="integer" required="true"/>
+        <column name="city" type="varchar" size="255" required="true"/>
+
         <!-- values: member, employee, admin -->
         <column name="role" type="varchar" size="255" defaultValue="customer" required="true"/>
         <unique>
@@ -24,24 +29,24 @@
     <!-- FIX: order is already a sql specific specifier therefore this table has a different name-->
     <table name="ordertbl" phpName="Order">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-        <column name="user_id" type="integer" required="true" />
+        <column name="user_id" type="integer" primaryKey="true" required="true" />
         <column name="status" type="varchar" size="10" defaultValue="new" />
         <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" />
-        <foreign-key foreignTable="user">
-            <reference local="user_id" foreign="id" onDelete="CASCADE" />
+        <foreign-key foreignTable="user" onDelete="CASCADE">
+            <reference local="user_id" foreign="id" />
         </foreign-key>
     </table>
     <table name="orderposition" phpName="OrderPosition">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="order_id" type="integer" required="true"/>
-        <column name="product_id" type="integer" required="true"/>
+        <column name="order_id" type="integer" primaryKey="true" required="true"/>
+        <column name="product_id" type="integer" primaryKey="true" required="true"/>
         <column name="quantity" type="integer" required="true"/>
-        <foreign-key foreignTable="ordertbl">
+        <foreign-key foreignTable="ordertbl" onDelete="CASCADE">
             <!-- remove orderposition if order is removed -->
-            <reference local="order_id" foreign="id" onDelete="CASCADE" />
+            <reference local="order_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="product">
-            <reference local="product_id" foreign="id" />
+        <foreign-key foreignTable="product" onDelete="RESTRICT">
+            <reference local="product_id" foreign="id"/>
         </foreign-key>
     </table>
 </database>

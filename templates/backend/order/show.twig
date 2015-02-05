@@ -1,0 +1,37 @@
+{% extends 'master.twig' %}
+
+{% block title %}Bestellungsinformation{% endblock %}
+
+{% block content %}
+
+    <div class="well">
+        <h1>Order overview</h1>
+
+        <p>ID: {{ order.getId() }}</p>
+        <strong>{{ order.getUser().getFirstname() }} {{ order.getUser().getLastName() }}</strong><br>
+        <strong>{{ order.getUser().getPlz() }} {{ order.getUser().getCity() }}</strong><br>
+        <strong>{{ order.getUser().getPhone() }}</strong>
+        <p>Date: {{ order.datetime().format("Y-m-d H:i:s") }}</p>
+        <p>total: {{ order_sum(order.getId()) }}</p>
+
+        <table class="table table-striped">
+            <tr>
+                <th>product</th>
+                <th>quantity</th>
+                <th>unit price</th>
+                <th>total</th>
+            </tr>
+
+            {% for position in order.getOrderPositions() %}
+                <tr>
+                    <td>{{ position.getProduct().getName() }}</td>
+                    <td>{{ position.getQuantity() }}</td>
+                    <td>{{ position.getProduct().getUnitPrice() }}</td>
+                    <td>{{ position.getProduct().getUnitPrice()*position.getQuantity() }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+{% endblock %}
