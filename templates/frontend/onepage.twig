@@ -33,6 +33,40 @@
 
         <h1>Bestellungen der letzten 24h</h1>
 
+        <table class="table">
+            <tr>
+                <th>products</th>
+                <th>amount</th>
+                <th>operations</th>
+            </tr>
+
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        <ul>
+                        {% for position in order.getOrderPositions() %}
+                            <li>
+                                {{ position.getQuantity() }} x
+                                {{ position.getProduct().getName() }}
+                            </li>
+
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ order_sum(order.getId()) }}</td>
+                    <td>
+                        <form action="/orders/{{ order.getId() }}" method="post">
+                            <input type="hidden" name="_METHOD" value="DELETE"/>
+                            <button class="btn btn-danger" type="submit" value="submit">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
     </div>
 
 {% endblock %}

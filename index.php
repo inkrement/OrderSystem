@@ -98,23 +98,17 @@
 
     /* show products (index page) */
     $app->get('/', $authenticateForRole('customer'), function () use ($app) {
-        $app->render('frontend/onepage.twig', ['products'=> ProductQuery::create()->findByDeleteflag(false)]);
+        $app->render('frontend/onepage.twig',
+            ['products'=> ProductQuery::create()->findByDeleteflag(false),
+                'orders' => OrderQuery::create()->filterByUserId($app->getCookie('userid'))->filterByDatetime(array('min' => time() - 24 * 60 * 60))]
+        );
     });
 
-    $app->group('/orders', $authenticateForRole('member'), function() use($app){
-
-        $app->get('/', function () use ($app) {
-            $userid = $app->getCookie('userid');
-            $app->render('frontend/order/list.twig', ['orders'=> OrderQuery::create()->findByUserId($userid)]);
-        });
-
-        $app->get('/:orderId', function ($orderId) use ($app) {
-            //TODO: check permissions
-
-            $app->render('frontend/order/show.twig', ['order'=> OrderQuery::create()->findPk($orderId)]);
-        });
-
+    $app->delete('/orders/:id', $authenticateForRole('customer'), function ($id) use ($app) {
+        OrderQuery::create()->findById($id)->delete();
+        $app->redirect('/');
     });
+
 
 
     /* login */
@@ -123,6 +117,8 @@
     });
 
     $app->post('/login', function () use ($app) {
+        global $auth_user;
+
         $credentials = $app->request()->post();
 
         $email=$credentials['username'];
@@ -130,15 +126,15 @@
 
         $app->log->info("new login attempt. username: '$email' password: '$password'");
 
-        $user = UserQuery::create()->findOneByEmail($email);
+        $auth_user = UserQuery::create()->findOneByEmail($email);
 
-        if($user != null && password_verify($password, $user->getPassword())){
+        if($auth_user != null && password_verify($password, $auth_user->getPassword())){
             $app->log->info('sucessfully logged in');
 
-            $app->setCookie('role', $user->getRole());
-            $app->setCookie('userid', $user->getId());
+            $app->setCookie('role', $auth_user->getRole());
+            $app->setCookie('userid', $auth_user->getId());
 
-            switch($user->getRole()){
+            switch($auth_user->getRole()){
                 case 'admin':
                 case 'employee':
                     $app->redirect('/backend/orders');
@@ -181,6 +177,13 @@
         $app->redirect('/login');
     });
 
+    /*
+    $app->group('/api', $authenticateForRole('customer'), function() use ($app){
+        $app->get('/orders');
+        $app->delete('/orders/:id');
+        $app->post('/orders');
+    });
+    */
 
     /* backend */
 
