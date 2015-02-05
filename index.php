@@ -33,11 +33,13 @@
         $product = new Product();
         $product->setName("Kartoffel");
         $product->setDescription("Irgendwelche Veggy Pflanzen");
+        $product->setImg("sadasd.png");
         $product->setUnitPrice(12.2);
         $product->save();
 
         $product2 = new Product();
         $product2->setName("Rindfleisch");
+        $product2->setImg("saasdasd.png");
         $product2->setDescription("Steak");
         $product2->setUnitPrice(43.2);
         $product2->save();

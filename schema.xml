@@ -16,9 +16,9 @@
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="name" type="varchar" size="128" required="true"/>
         <column name="img" type="varchar" size="128" required="true"/>
-        <column name="unit" type="varchar" size="10" required="true"/>
+        <column name="unit" type="varchar" size="10" defaultValue="kg" required="false"/>
         <column name="description" type="varchar" size="255" required="false"/>
-        <column name="deleteFlag" type="boolean" required="false" defaultValue="false"/>
+        <column name="deleteFlag" type="boolean" defaultValue="false" required="false" />
         <column name="unit_price" type="float" required="true"/>
     </table>
     <!-- FIX: order is already a sql specific specifier therefore this table has a different name-->
