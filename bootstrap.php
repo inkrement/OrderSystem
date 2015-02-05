@@ -85,6 +85,8 @@ function rights($role){
             $rights += 100;
         case 'member':
             $rights += 100;
+        case 'customer':
+            $rights += 100;
     }
 
     return $rights;

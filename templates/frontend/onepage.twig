@@ -1,0 +1,38 @@
+{% extends 'master.twig' %}
+
+{% block title %}Willkommen {% endblock %}
+
+{% block content %}
+
+    <div class="well">
+
+        <h1>Produkte</h1>
+
+        <table class="table">
+            <tr>
+                <th>pic</th>
+                <th>name</th>
+                <th>beschreibung</th>
+                <th>preis/kg</th>
+            </tr>
+
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <img src="/templates/img/{{ product.getImg() }}" />
+                    </td>
+                    <td>{{ product.getName() }}</td>
+                    <td>{{ product.description() }}</td>
+                    <td>{{ product.getUnitPrice() }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+        <h1>Warenkorb</h1>
+
+        <h1>Bestellungen der letzten 24h</h1>
+
+    </div>
+
+{% endblock %}

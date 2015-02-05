@@ -97,8 +97,8 @@
     });
 
     /* show products (index page) */
-    $app->get('/', $authenticateForRole('member'), function () use ($app) {
-        $app->render('frontend/product/list.twig', ['products'=> ProductQuery::create()->find()]);
+    $app->get('/', $authenticateForRole('customer'), function () use ($app) {
+        $app->render('frontend/onepage.twig', ['products'=> ProductQuery::create()->findByDeleteflag(false)]);
     });
 
     $app->group('/orders', $authenticateForRole('member'), function() use($app){
@@ -144,6 +144,7 @@
                     $app->redirect('/backend/orders');
                     break;
                 case 'member':
+                case 'customer':
                 default:
                     $app->redirect('/');
             }
@@ -222,7 +223,7 @@
 
         //add
         $app->get('/products/new', function () use ($app) {
-            $app->render('backend/product/new.twig', []);
+            $app->render('backend/product/add.twig', []);
         });
 
         $app->post('/products/new', function () use ($app){
@@ -242,6 +243,27 @@
             $product->save();
 
             $app->redirect('/backend/products');
+        });
+
+        $app->get('/users/new', function () use ($app) {
+            $app->render('/backend/user/add.twig', []);
+        });
+
+        $app->post('/users/new', function () use ($app){
+            $post = $app->request()->post();
+
+            $user = new User();
+            $user->setFirstname($post['inputFirstname']);
+            $user->setLastname($post['inputLastname']);
+            $user->setEmail($post['inputEmail']);
+            $user->setPassword($post['inputPassword']);
+            $user->setRole($post['inputRole']);
+            $user->setPhone($post['inputPhone']);
+            $user->setPlz($post['inputPlz']);
+            $user->setCity($post['inputCity']);
+            $user->save();
+
+            $app->redirect('/backend/users');
         });
 
     });

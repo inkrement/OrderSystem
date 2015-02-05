@@ -27,10 +27,10 @@
                         <form action="/backend/orders/{{ order.getId() }}" method="post">
                             <input type="hidden" name="_METHOD" value="DELETE"/>
                             <!-- show -->
-                            <a class="btn btn-default" href="/backend/orders/{{ order.getId() }}">
+                            <a class="btn btn-primary" href="/backend/orders/{{ order.getId() }}">
                                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                             </a>
-                            <button class="btn btn-default" type="submit" value="submit">
+                            <button class="btn btn-danger" type="submit" value="submit">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </form>

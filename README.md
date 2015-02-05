@@ -23,17 +23,13 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * backend: add employee to login filter
- * order controller
- * product url (load images)
- * frontend: cart
- * frontend: edit order (positions)
- * frontend: delete order
- * backend: add customer
- * backend: remove customer
- * backend: list customers
- * backend: add product
- * backend: remove product (set unvisible)
+ * frontend: add to cart
+ * frontend: remove from cart
+ * frontend: list items in cart
+ * frontend: checkout cart
+ * frontend: list old (<24h) orders
+ * frontend: remove old (<24h) orders
+ * api: endpoints for cart
 
 ## Developer Info
 
