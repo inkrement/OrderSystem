@@ -26,6 +26,22 @@
         $user->setPassword(password_hash('a', PASSWORD_DEFAULT));
         $user->save();
 
+        $user = new User();
+        $user->setRole('employee');
+        $user->setFirstname('andrea');
+        $user->setLastname('musterfrau');
+        $user->setEmail('peter@musterfrau.at');
+        $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
+        $user->save();
+
+        $user = new User();
+        $user->setRole('customer');
+        $user->setFirstname('peter');
+        $user->setLastname('mustermann');
+        $user->setEmail('peter@mustermann.at');
+        $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
+        $user->save();
+
         $order = new Order();
         $order->setUser($user);
         $order->save();
@@ -44,6 +60,13 @@
         $product2->setUnitPrice(43.2);
         $product2->save();
 
+        $product3 = new Product();
+        $product3->setName("Wasser");
+        $product3->setImg("wasser.png");
+        $product3->setDescription("mineralwasser in glasflasche");
+        $product3->setUnitPrice(1.2);
+        $product3->save();
+
         $order_position = new OrderPosition();
         $order_position->setProductId($product);
         $order_position->setQuantity(2);
@@ -53,6 +76,12 @@
         $order_position = new OrderPosition();
         $order_position->setProductId($product2);
         $order_position->setQuantity(4);
+        $order_position->setOrder($order);
+        $order_position->save();
+
+        $order_position = new OrderPosition();
+        $order_position->setProductId($product3);
+        $order_position->setQuantity(10);
         $order_position->setOrder($order);
         $order_position->save();
 
@@ -99,7 +128,16 @@
 
             $app->setCookie('role', $user->getRole());
             $app->setCookie('userid', $user->getId());
-            $app->redirect('/');
+
+            switch($user->getRole()){
+                case 'admin':
+                case 'employee':
+                    $app->redirect('/backend/orders');
+                    break;
+                case 'member':
+                default:
+                    $app->redirect('/');
+            }
             return;
         }
         $app->log->info('wrong credentials');
@@ -137,7 +175,6 @@
     /* backend */
 
     $app->group('/backend', $authenticateForRole('admin'), function () use ($app) {
-
         /* list */
         $app->get('/orders', function () use ($app) {
             $app->render('/backend/order/list.twig', ['orders'=> OrderQuery::create()->find()]);
