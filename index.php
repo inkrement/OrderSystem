@@ -17,95 +17,79 @@
      * Routes
      */
 
-    $app->get('/seed', function(){
-        $user = new User();
-        $user->setRole('admin');
-        $user->setFirstname('chris');
-        $user->setLastname('hotz');
-        $user->setEmail('a');
-        $user->setCity('Wien');
-        $user->setPlz(1040);
-        $user->setPhone('004369911602033');
-        $user->setPassword(password_hash('a', PASSWORD_DEFAULT));
-        $user->save();
+    $app->get('/seed', function() use ($app){
+        include 'seed.php';
 
-        $user = new User();
-        $user->setRole('employee');
-        $user->setFirstname('andrea');
-        $user->setLastname('musterfrau');
-        $user->setEmail('peter@musterfrau.at');
-        $user->setCity('Wien');
-        $user->setPlz(1140);
-        $user->setPhone('004369911602033');
-        $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
-        $user->save();
-
-        $user = new User();
-        $user->setRole('customer');
-        $user->setFirstname('peter');
-        $user->setLastname('mustermann');
-        $user->setEmail('peter@mustermann.at');
-        $user->setCity('Wien');
-        $user->setPlz(1090);
-        $user->setPhone('004369911602033');
-        $user->setPassword(password_hash('1234', PASSWORD_DEFAULT));
-        $user->save();
-
-        $order = new Order();
-        $order->setUser($user);
-        $order->save();
-
-        $product = new Product();
-        $product->setName("Kartoffel");
-        $product->setDescription("Irgendwelche Veggy Pflanzen");
-        $product->setImg("sadasd.png");
-        $product->setUnitPrice(12.2);
-        $product->save();
-
-        $product2 = new Product();
-        $product2->setName("Rindfleisch");
-        $product2->setImg("saasdasd.png");
-        $product2->setDescription("Steak");
-        $product2->setUnitPrice(43.2);
-        $product2->save();
-
-        $product3 = new Product();
-        $product3->setName("Wasser");
-        $product3->setImg("wasser.png");
-        $product3->setDescription("mineralwasser in glasflasche");
-        $product3->setUnitPrice(1.2);
-        $product3->save();
-
-        $order_position = new OrderPosition();
-        $order_position->setProduct($product);
-        $order_position->setQuantity(2);
-        $order_position->setOrder($order);
-        $order_position->save();
-
-        $order_position = new OrderPosition();
-        $order_position->setProduct($product2);
-        $order_position->setQuantity(4);
-        $order_position->setOrder($order);
-        $order_position->save();
-
-        $order_position = new OrderPosition();
-        $order_position->setProduct($product3);
-        $order_position->setQuantity(10);
-        $order_position->setOrder($order);
-        $order_position->save();
-
+        $app->redirect('/');
     });
 
     /* show products (index page) */
     $app->get('/', $authenticateForRole('customer'), function () use ($app) {
+        $cart = json_decode($app->getCookie('orderpositions'), true);
+        if($cart == null) $cart = [];
+
         $app->render('frontend/onepage.twig',
             ['products'=> ProductQuery::create()->findByDeleteflag(false),
+                'cart' => $cart,
                 'orders' => OrderQuery::create()->filterByUserId($app->getCookie('userid'))->filterByDatetime(array('min' => time() - 24 * 60 * 60))]
         );
     });
 
     $app->delete('/orders/:id', $authenticateForRole('customer'), function ($id) use ($app) {
         OrderQuery::create()->findById($id)->delete();
+        $app->redirect('/');
+    });
+
+    $app->post('/order', $authenticateForRole('customer'), function() use ($app) {
+        $post = $app->request()->post();
+        $c = $app->getCookie('orderpositions');
+
+        $orders = ($c == null)?[]:json_decode($c, true);
+
+        array_push($orders, ['id' => $post['productId'], 'quantity' => $post['quantity'],
+            'name' => $post['productName']]);
+
+        $app->setCookie('orderpositions', json_encode($orders));
+        $app->redirect('/');
+    });
+
+    $app->delete('/order/:id', $authenticateForRole('customer'), function($id) use ($app) {
+        $post = $app->request()->post();
+        $c = $app->getCookie('orderpositions');
+        $orders = ($c == null)?[]:json_decode($c, true);
+
+        //var_dump($orders);
+        //echo "------";
+        unset($orders[$id]);
+        //var_dump($orders);
+
+        $app->setCookie('orderpositions', json_encode($orders));
+        $app->redirect('/');
+    });
+
+    $app->get('/order', $authenticateForRole('customer'), function() use ($app) {
+        $c = $app->getCookie('orderpositions');
+        $orders = ($c == null)?[]:json_decode($c, true);
+
+        //TODO: this could be better.
+        $user = UserQuery::create()->findById($app->getCookie('userid'))->getFirst();
+
+        if(count($orders) > 0){
+            $order = new Order();
+            $order->setUser($user);
+            $order->save();
+
+            foreach($orders as $pos){
+                $orderpos = new OrderPosition();
+                $orderpos->setQuantity($pos['quantity']);
+                $orderpos->setProduct(ProductQuery::create()->findById($pos['id'])->getFirst());
+                $orderpos->setOrder($order);
+                $orderpos->save();
+            }
+
+        }
+
+        $app->setCookie('orderpositions', json_encode([]));
         $app->redirect('/');
     });
 
@@ -176,14 +160,6 @@
 
         $app->redirect('/login');
     });
-
-    /*
-    $app->group('/api', $authenticateForRole('customer'), function() use ($app){
-        $app->get('/orders');
-        $app->delete('/orders/:id');
-        $app->post('/orders');
-    });
-    */
 
     /* backend */
 

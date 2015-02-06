@@ -30,8 +30,8 @@
     <table name="ordertbl" phpName="Order">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
         <column name="user_id" type="integer" primaryKey="true" required="true" />
-        <column name="status" type="varchar" size="10" defaultValue="new" />
-        <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" />
+        <column name="status" type="varchar" size="10" defaultValue="new" required="false"/>
+        <column name="datetime" type="timestamp" defaultExpr="CURRENT_TIMESTAMP" required="false"/>
         <foreign-key foreignTable="user" onDelete="CASCADE">
             <reference local="user_id" foreign="id" />
         </foreign-key>

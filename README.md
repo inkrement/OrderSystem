@@ -30,6 +30,8 @@ Then you can load all dependencies:
  * frontend: list old (<24h) orders
  * frontend: remove old (<24h) orders
  * api: endpoints for cart
+ * use singleton? to store user object (auth)
+ * makefile load php composer
 
 ## Developer Info
 
