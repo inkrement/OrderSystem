@@ -23,13 +23,6 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * frontend: add to cart
- * frontend: remove from cart
- * frontend: list items in cart
- * frontend: checkout cart
- * frontend: list old (<24h) orders
- * frontend: remove old (<24h) orders
- * api: endpoints for cart
  * use singleton? to store user object (auth)
  * makefile load php composer
 
