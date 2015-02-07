@@ -1,15 +1,14 @@
 <?php
-
-use Slim\Slim;
-use Slim\Views;
-use Service\AuthService;
-use Service\OrderService;
-
 /**
  * BOOTSTRAP
  *
  * @author Christian Hotz-Behofsits <chris.hotz.behofits@gmail.com>
  */
+
+use Slim\Slim;
+use Slim\Views;
+use Service\AuthService;
+use Service\OrderService;
 
 /*
  * SLIM Config
@@ -25,17 +24,6 @@ $app = new Slim([
     //some secret for cookies
     'cookies.secret_key' => '043028b2c88efd91a024b7aace0f25f8'
 ]);
-$app->add(new \Slim\Middleware\SessionCookie(array(
-    'expires' => '20 minutes',
-    'path' => '/',
-    'domain' => null,
-    'secure' => false,
-    'httponly' => false,
-    'name' => 'slim_session',
-    'secret' => 'SomeSuperSecretValue',
-    'cipher' => MCRYPT_RIJNDAEL_256,
-    'cipher_mode' => MCRYPT_MODE_CBC
-)));
 
 /*
  * TWIG CONFIG

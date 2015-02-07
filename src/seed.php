@@ -37,6 +37,11 @@ $order = new Order();
 $order->setUser($user);
 $order->save();
 
+$order = new Order();
+$order->setUser($user);
+$order->setDatetime('2015-01-07 14:53:12');
+$order->save();
+
 $product = new Product();
 $product->setName("Kartoffel");
 $product->setDescription("Irgendwelche Veggy Pflanzen");

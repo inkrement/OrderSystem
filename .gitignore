@@ -7,3 +7,4 @@ domain/
 sql/
 config/config.php
 templates/img/
+composer.phar

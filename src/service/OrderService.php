@@ -31,7 +31,7 @@ class OrderService {
     }
 
     public static function all(){
-        return \OrderQuery::create()->find();
+        return \OrderQuery::create()->orderByDatetime('DESC')->find();
     }
 
     public static function getOrderPositions($order_id){

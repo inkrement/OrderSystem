@@ -37,7 +37,7 @@ $app->group('/auth', function() use ($app){
         $email = $credentials['username'];
         $password = $credentials['password'];
 
-        if(AuthService::check($email,$password)){
+        if(AuthService::check($email, $password)){
             switch(AuthService::getUser()->getRole()){
                 case 'admin':
                 case 'employee':
