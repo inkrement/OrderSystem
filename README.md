@@ -1,5 +1,5 @@
 # Order System
-This is a small order platform with a session based registration system.
+This is a small order platform with a cookie based registration system.
 
 ## Requirements
  * PHP 5.5

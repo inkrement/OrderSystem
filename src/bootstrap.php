@@ -14,10 +14,10 @@ use Service\OrderService;
  * SLIM Config
  */
 $app = new Slim([
-    'debug' => true,
+    'debug' => false,
     'templates.path' => './templates',
-    'log.level' => \Slim\Log::DEBUG,
-    //'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
+    'log.level' => \Slim\Log::INFO,
+    'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
     //'cookies.encrypt' => true,
     //do not allow client to view cookies
     //'cookies.httponly' => true,
@@ -30,7 +30,7 @@ $app = new Slim([
  */
 $view = $app->view(new Views\Twig());
 $view->parserOptions = array(
-    'debug' => true,
+    'debug' => false,
     'charset' => 'utf-8',
     'cache' => realpath('./templates/cache'),
     'auto_reload' => true,

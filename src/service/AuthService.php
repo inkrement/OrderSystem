@@ -13,13 +13,12 @@ class AuthService {
 
     public static function logout(){
         $app = Slim::getInstance();
-        $app->deleteCookie('role');
         $app->deleteCookie('userid');
     }
 
     public static function login(\User $user){
         $app = Slim::getInstance();
-        $app->setEncryptedCookie('userid', $user->getId());
+        $app->setCookie('userid', $user->getId());
     }
 
     public static function check($email, $password){
