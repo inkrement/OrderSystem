@@ -12,7 +12,14 @@
 $app = new \Slim\Slim([
     'debug' => true,
     'templates.path' => './templates',
-    'log.level' => \Slim\Log::DEBUG
+    'log.level' => \Slim\Log::DEBUG,
+    //'cookies.encrypt' => true,
+
+    //do not allow client to view cookies
+    //'cookies.httponly' => true,
+
+    //some secret for cookies
+    'cookies.secret_key' => '043028b2c88efd91a024b7aace0f25f8'
 ]);
 
 $app->add(new \Slim\Middleware\SessionCookie(array(
@@ -71,6 +78,15 @@ $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($ap
 
 
 /**
+ * Authentication specific things
+ *
+ * this includes:
+ * - rights management
+ * - NO routes
+ */
+
+
+/**
  * converts right to number
  * @param $role
  * @return int
@@ -121,3 +137,5 @@ $authenticateForRole = function ( $role = 'member' ) {
         }
     };
 };
+
+
