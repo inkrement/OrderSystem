@@ -9,14 +9,12 @@ This is a small order platform with a session based registration system.
 ## Usage
 open a new terminal window and navigate into this folder
 
-> cd /some/path/projectX
+> cd /some/path/projectX  
 > make
 
 ATTENTION: change relative path in config/propel.yaml
 
 ## TODO
- * makefile load php composer
- * backend: <24h order show
  * frontend: flash messages
  * backend: flash messages
  * general: sqlite absolute path
