@@ -6,3 +6,4 @@ composer.lock
 domain/
 sql/
 config/config.php
+templates/img/

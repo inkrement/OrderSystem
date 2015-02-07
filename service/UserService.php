@@ -1,9 +1,10 @@
 <?php namespace Service;
+
 /**
- * Created by PhpStorm.
- * User: chris
- * Date: 07.02.15
- * Time: 10:09
+ * UserService
+ *
+ * @author Christian Hotz-Behofsits <chris.hotz.behofits@gmail.com>
+ * @date 07.02.2015
  */
 
 class UserService {
