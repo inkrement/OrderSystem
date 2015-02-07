@@ -20,12 +20,9 @@ class AuthService {
     public static function login(\User $user){
         $app = Slim::getInstance();
         $app->setEncryptedCookie('userid', $user->getId());
-
-        var_dump($app->getEncryptedCookie('userid'));
     }
 
     public static function check($email, $password){
-        $app = Slim::getInstance();
         $user = \UserQuery::create()->findOneByEmail($email);
 
         if ($user != null && password_verify($password, $user->getPassword())) {
@@ -46,9 +43,8 @@ class AuthService {
             $user = new \User();
             $user->setRole('guest');
         }
-        //FIXME: filter
-        return \UserQuery::create()->find()->getFirst();
-        //return $user;
+
+        return $user;
     }
 
 

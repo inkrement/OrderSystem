@@ -23,13 +23,12 @@ Then you can load all dependencies:
 > php composer.phar install
 
 ## TODO
- * use singleton? to store user object (auth)
  * makefile load php composer
  * frontend: userinfo header (logout...)
  * backend: <24h order show
  * frontend: flash messages
  * backend: flash messages
- * general: public folder
+ * general: sqlite absolute path
 
 ## Developer Info
 

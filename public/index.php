@@ -32,7 +32,6 @@ $app->group('/auth', function() use ($app){
     $app->get('/login', function () use ($app) {
         $app->render('login.twig', []);
     });
-
     $app->post('/login', function () use ($app) {
         $credentials = $app->request()->post();
         $email = $credentials['username'];
@@ -67,7 +66,7 @@ $app->group('/auth', function() use ($app){
  */
 $app->get('/', $authenticateForRole('customer'), function () use ($app) {
     $app->render('frontend/onepage.twig',
-        ['products'=> ProductService::get(),
+        ['products'=> ProductService::all(),
             'cart' => CartService::get(),
             'orders' => OrderService::getLast24Hours(AuthService::getUser())]
     );

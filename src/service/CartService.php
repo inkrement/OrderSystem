@@ -1,4 +1,5 @@
 <?php namespace Service;
+use Slim\Slim;
 
 /**
  * CartService
@@ -22,21 +23,21 @@ class CartService {
     public static function add($productId, $quantity, $productName){
         $orders = CartService::get();
         array_push($orders, ['id' => $productId, 'quantity' => $quantity,
-            'name' => $productName['productName']]);
-        setCart($orders);
+            'name' => $productName]);
+        CartService::set($orders);
     }
 
     public static function order($user){
         $cart = CartService::get();
         if(count($cart) > 0){
-            $order = new Order();
+            $order = new \Order();
             $order->setUser($user);
             $order->save();
 
             foreach($cart as $pos){
-                $orderpos = new OrderPosition();
+                $orderpos = new \OrderPosition();
                 $orderpos->setQuantity($pos['quantity']);
-                $orderpos->setProduct(ProductQuery::create()->findById($pos['id'])->getFirst());
+                $orderpos->setProduct(\ProductQuery::create()->findById($pos['id'])->getFirst());
                 $orderpos->setOrder($order);
                 $orderpos->save();
             }

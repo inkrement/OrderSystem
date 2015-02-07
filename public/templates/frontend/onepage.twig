@@ -5,6 +5,11 @@
 {% block content %}
 
     <div class="well">
+    {% if isAllowed('customer') %}
+        {{ getUser().getFirstname() }}
+        {{ getUser().getLastname() }}
+        <a href="{{ siteUrl('/auth/logout') }}">Logout</a>
+    {% endif %}
 
         <h1>Produkte</h1>
 
@@ -26,10 +31,10 @@
                     <td>{{ product.description() }}</td>
                     <td>{{ product.getUnitPrice() }}</td>
                     <td>
-                        <form action="/order" method="post">
+                        <form action="{{ siteUrl('/cart') }}" method="post">
                             <input type="hidden" name="productId" value="{{ product.getId() }}">
                             <input type="hidden" name="productName" value="{{ product.getName() }}">
-                            <input type="number" name="quantity">
+                            <input type="number" name="quantity" value="1">
                             <button type="submit">order</button>
                         </form>
                     </td>
@@ -40,7 +45,7 @@
 
         {% if not cart is empty %}
             <h1>Warenkorb</h1>
-            <a href="/order">order now</a>
+            <a href="{{ siteUrl('/cart') }}">order now</a>
 
             <table class="table">
                 <tr>
@@ -58,7 +63,7 @@
                             {{ pos.quantity }}
                         </td>
                         <td>
-                            <form action="/order/{{ loop.index0 }}" method="post">
+                            <form action="{{ siteUrl('/cart') }}/{{ loop.index0 }}" method="post">
                                 <input type="hidden" name="_METHOD" value="DELETE"/>
                                 <button class="btn btn-danger" type="submit" value="submit">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -99,7 +104,7 @@
                         </td>
                         <td>{{ order_sum(order.getId()) }}</td>
                         <td>
-                            <form action="/orders/{{ order.getId() }}" method="post">
+                            <form action="{{ siteUrl('/orders') }}/{{ order.getId() }}" method="post">
                                 <input type="hidden" name="_METHOD" value="DELETE"/>
                                 <button class="btn btn-danger" type="submit" value="submit">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

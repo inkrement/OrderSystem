@@ -10,14 +10,14 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     {% if isAllowed('admin') %}
-                        <li><a href="/backend/products">Produkte</a></li>
-                        <li><a href="/backend/orders">Bestellungen</a></li>
-                        <li><a href="/backend/users">Benutzer</a></li>
+                        <li><a href="{{ siteUrl('/backend/products') }}">Produkte</a></li>
+                        <li><a href="{{ siteUrl('/backend/orders') }}">Bestellungen</a></li>
+                        <li><a href="{{ siteUrl('/backend/users') }}">Benutzer</a></li>
                     {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="{{ siteUrl('/auth/logout') }}">Logout</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

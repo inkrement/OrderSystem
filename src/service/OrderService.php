@@ -35,7 +35,7 @@ class OrderService {
     }
 
     public static function getOrderPositions($order_id){
-        return OrderPositionQuery::create()->findByOrderId($order_id);
+        return \OrderPositionQuery::create()->findByOrderId($order_id);
     }
 
     public static function getTotal($order_id){
@@ -43,7 +43,7 @@ class OrderService {
 
         $sum = 0.0;
         foreach($order_positions as $position)
-            $sum += $position->getQuantity * $position->getProduct()->getUnitPrice();
+            $sum += $position->getQuantity() * $position->getProduct()->getUnitPrice();
 
         return $sum;
     }

@@ -18,7 +18,7 @@ $app = new Slim([
     'debug' => true,
     'templates.path' => './templates',
     'log.level' => \Slim\Log::DEBUG,
-    'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
+    //'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
     //'cookies.encrypt' => true,
     //do not allow client to view cookies
     //'cookies.httponly' => true,
@@ -59,9 +59,12 @@ $function = new Twig_SimpleFunction('order_sum', function ($orderId) use($app){
 
 $twig->addFunction($function);
 $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($app){
-    return isAllowed($app->getCookie('role', $role));
+    return AuthService::isAllowed(AuthService::getUser()->getRole(), $role);
 }));
 
+$twig->addFunction(new Twig_SimpleFunction('getUser', function () use($app){
+    return AuthService::getUser();
+}));
 
 
 /**
@@ -73,10 +76,10 @@ $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($ap
 $authenticateForRole = function ( $role = 'member' ) {
     return function () use ( $role ) {
         $app = Slim::getInstance();
-
-        $current_role = AuthService::getUser()->getRole;
+        $current_role = AuthService::getUser()->getRole();
 
         if(!AuthService::isAllowed($current_role, $role)){
+            $app->log->info("not allowed rights: '$current_role' and not '$role'" );
             $app->flash('error', 'Login required');
             $app->redirect('/auth/login');
         }
