@@ -1,4 +1,10 @@
 <?php
+
+use Slim\Slim;
+use Slim\Views;
+use Service\AuthService;
+use Service\OrderService;
+
 /**
  * BOOTSTRAP
  *
@@ -8,10 +14,11 @@
 /*
  * SLIM Config
  */
-$app = new \Slim\Slim([
+$app = new Slim([
     'debug' => true,
     'templates.path' => './templates',
     'log.level' => \Slim\Log::DEBUG,
+    'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
     //'cookies.encrypt' => true,
     //do not allow client to view cookies
     //'cookies.httponly' => true,
@@ -33,7 +40,7 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
 /*
  * TWIG CONFIG
  */
-$view = $app->view(new \Slim\Views\Twig());
+$view = $app->view(new Views\Twig());
 $view->parserOptions = array(
     'debug' => true,
     'charset' => 'utf-8',
@@ -42,12 +49,12 @@ $view->parserOptions = array(
     'strict_variables' => false,
     'autoescape' => true
 );
-$app->view->parserExtensions = array(new \Slim\Views\TwigExtension());
+$app->view->parserExtensions = array(new Views\TwigExtension());
 $view->parserDirectory = 'Twig';
 
 $twig = $app->view->getEnvironment();
 $function = new Twig_SimpleFunction('order_sum', function ($orderId) use($app){
-    return \Service\OrderService::getTotal($orderId);
+    return OrderService::getTotal($orderId);
 });
 
 $twig->addFunction($function);
@@ -65,9 +72,11 @@ $twig->addFunction(new Twig_SimpleFunction('isAllowed', function ($role) use($ap
  */
 $authenticateForRole = function ( $role = 'member' ) {
     return function () use ( $role ) {
-        $app = \Slim\Slim::getInstance();
+        $app = Slim::getInstance();
 
-        if(!isAllowed(\Service\AuthService::getUser()->getRole(), $role)){
+        $current_role = AuthService::getUser()->getRole;
+
+        if(!AuthService::isAllowed($current_role, $role)){
             $app->flash('error', 'Login required');
             $app->redirect('/auth/login');
         }

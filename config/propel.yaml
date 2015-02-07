@@ -24,11 +24,11 @@ propel:
         # EMERGENCY (600): Emergency: system is unusable.
         defaultLogger:
           type: stream
-          path: log/propel.log
+          path: ../log/propel.log
           level: 100
         shop:
           type: stream
-          path: log/propel_shop.log
+          path: ../log/propel_shop.log
           level: 100
       connections:
           - shop

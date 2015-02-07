@@ -12,13 +12,16 @@ use Service\ProductService;
 use Service\OrderService;
 use Service\UserService;
 
-require 'vendor/autoload.php';
-require_once './config/config.php';
-require_once './config/php_settings.php';
-require_once 'bootstrap.php';
+require '../vendor/autoload.php';
+require_once '../config/config.php';
+require_once '../config/php_settings.php';
+require_once '../src/bootstrap.php';
 
+/*
+ * SEED
+ */
 $app->get('/seed', function() use ($app){
-    include 'seed.php';
+    include '../src/seed.php';
     $app->redirect('/');
 });
 

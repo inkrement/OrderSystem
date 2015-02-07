@@ -13,9 +13,9 @@
     },
 
     "autoload": {
-        "classmap": ["domain/"],
+        "classmap": ["src/domain/"],
         "psr-4" : {
-            "Service\\": "service/"
+            "Service\\": "src/service/"
         }
     }
 }
