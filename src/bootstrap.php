@@ -61,6 +61,10 @@ $twig->addFunction(new Twig_SimpleFunction('getUser', function () use($app){
  * @param string $role
  * @return callable
  */
+
+//login if cookie is set
+AuthService::start();
+
 $authenticateForRole = function ( $role = 'member' ) {
     return function () use ( $role ) {
         $app = Slim::getInstance();

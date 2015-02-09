@@ -38,6 +38,7 @@ $app->group('/auth', function() use ($app){
         $password = $credentials['password'];
 
         if(AuthService::check($email, $password)){
+            $app->log->info("role: ". AuthService::getUser()->getRole());
             switch(AuthService::getUser()->getRole()){
                 case 'admin':
                 case 'employee':
@@ -46,7 +47,7 @@ $app->group('/auth', function() use ($app){
                 case 'member':
                 case 'customer':
                 default:
-                    $app->redirect('/');
+                    $app->redirect('/auth/login');
             }
         }
 

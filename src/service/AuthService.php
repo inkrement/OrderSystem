@@ -11,6 +11,11 @@ use Slim\Slim;
 
 class AuthService {
 
+    public static function start(){
+        $app = Slim::getInstance();
+        $app->userid = $app->getCookie('userid');
+    }
+
     public static function logout(){
         $app = Slim::getInstance();
         $app->deleteCookie('userid');
@@ -19,6 +24,7 @@ class AuthService {
     public static function login(\User $user){
         $app = Slim::getInstance();
         $app->setCookie('userid', $user->getId());
+        $app->userid=$user->getId();
     }
 
     public static function check($email, $password){
@@ -34,7 +40,7 @@ class AuthService {
 
     public static function getUser() {
         $app = Slim::getInstance();
-        $id = $app->getCookie('userid');
+        $id = $app->userid;
 
         $user = \UserQuery::create()->findById($id)->getFirst();
 
