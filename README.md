@@ -18,3 +18,4 @@ ATTENTION: change relative path in config/propel.yaml
  * frontend: flash messages
  * backend: flash messages
  * general: sqlite absolute path
+ * templates in src and static files in public

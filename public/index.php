@@ -46,6 +46,8 @@ $app->group('/auth', function() use ($app){
                     break;
                 case 'member':
                 case 'customer':
+                    $app->redirect('/');
+                    break;
                 default:
                     $app->redirect('/auth/login');
             }
@@ -53,7 +55,7 @@ $app->group('/auth', function() use ($app){
 
         $app->log->info('wrong credentials');
         $app->flash('error', 'wrong credentials');
-        $app->redirect('/login');
+        $app->redirect('/auth/login');
     });
     $app->get('/logout', function () use ($app) {
         AuthService::logout();
