@@ -6,7 +6,7 @@ propel:
         # use the following config for production profile
         # classname: Propel\Runtime\Connection\ConnectionWrapper
         classname: Propel\Runtime\Connection\DebugPDO
-        dsn: "sqlite:shop.db"
+        dsn: "sqlite:/app/shop.db"
         user: "chris"
         password: "somepassword"
         settings:

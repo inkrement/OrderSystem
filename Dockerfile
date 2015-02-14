@@ -15,7 +15,6 @@ RUN rm -rf /etc/apache2/sites-available/* /etc/apache2/sites-enabled/*
 ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN ln /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
-
 RUN mkdir -p src/domain && composer install &&\
     vendor/bin/propel config:convert --output-dir=config --config-dir=config &&\
     vendor/bin/propel model:build --output-dir=src/domain --config-dir=config &&\

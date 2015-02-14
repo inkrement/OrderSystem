@@ -5,7 +5,7 @@ $serviceContainer->setAdapterClass('shop', 'sqlite');
 $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array (
   'classname' => 'Propel\\Runtime\\Connection\\DebugPDO',
-  'dsn' => 'sqlite:/tmp/shop.db',
+  'dsn' => 'sqlite:/app/shop.db',
   'user' => 'chris',
   'password' => 'somepassword',
   'settings' =>

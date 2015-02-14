@@ -16,7 +16,7 @@ use Service\OrderService;
 $app = new Slim([
     'debug' => false,
     'templates.path' => './templates',
-    'log.level' => \Slim\Log::INFO,
+    'log.level' => \Slim\Log::DEBUG,
     'log.writer' => (new \Slim\LogWriter(fopen('../log/shop.log', 'a'))),
     //'cookies.encrypt' => true,
     //do not allow client to view cookies
@@ -30,7 +30,7 @@ $app = new Slim([
  */
 $view = $app->view(new Views\Twig());
 $view->parserOptions = array(
-    'debug' => false,
+    'debug' => true,
     'charset' => 'utf-8',
     'cache' => realpath('./templates/cache'),
     'auto_reload' => true,
