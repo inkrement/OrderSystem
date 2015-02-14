@@ -19,3 +19,12 @@ ATTENTION: change relative path in config/propel.yaml
  * backend: flash messages
  * general: sqlite absolute path
  * templates in src and static files in public
+
+
+## Docker
+
+build
+
+> docker build -t -i shop .
+
+docker run -d -p 80:80 shop
